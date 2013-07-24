@@ -18,10 +18,10 @@ When we get to the stage of having fellow Wardlab members comment on our work, l
 For both privacy and efficiency reasons, this repo should contain a minimum of data necessary for plotting. Ideally, this would contain the following columns:
 
 ```
-SenderActor Action ReceiverActor  Date  Latitude  Longitude Source
+SenderActor Action ReceiverActor  Date  Latitude  Longitude Country Source
 ```
 
-`SenderActor` is either "govt" or "anti"; `ReceiverActor` is the opposite. `Action` will be one of "protest", "repress", or "fight". `Date`, `Latitude`, and `Longitude` are self-explanatory. `Source` is an indicator of whether the event is from ICEWS or GDELT.  
+`SenderActor` is either "govt" or "anti"; `ReceiverActor` is the opposite. `Action` will be one of "protest", "repress", or "fight". `Date`, `Latitude`, `Longitude`, and `Country` are self-explanatory. `Source` is an indicator of whether the event is from ICEWS or GDELT.  
 
 For now, these data should be in plain-text (.csv) format. As we progress toward public visualizations we may put them into a database format (eg MongoDB). 
 
