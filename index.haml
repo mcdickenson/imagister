@@ -9,5 +9,5 @@
 	%body
 		%h1 Hello world!
 		%script{src: "d3/d3.v3.min.js", type: "text/javascript"}
-		:javascript 
-			d3.select("body").append("svg").attr("width", 50).attr("height", 50).append("circle").attr("cx", 25).attr("cy", 25).attr("r", 25).style("fill", "blue");
+		%script{src: "js/circle.js", type: "text/javascript"}
+			
