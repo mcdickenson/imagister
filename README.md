@@ -27,7 +27,7 @@ For now, these data should be in plain-text (.csv) format. As we progress toward
 
 ## html
 
-This is where we can put plain or marked-up text describing the project. 
+This is where we can put plain or marked-up text describing the project, in addition to the index page. If you prefer using haml or markdown that's fine too.  
 
 ## js
 
