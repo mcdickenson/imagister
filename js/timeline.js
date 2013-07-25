@@ -3,6 +3,9 @@ var maxDate = new Date("2012-06-04");
 var height = 100;
 var width = 200; 
 var increment = 5; 
+var green = "#7FC97F";
+var purple = "#BEAED4";
+var red = "#FDC086"; 
 
 var records=[
 	{
@@ -206,5 +209,7 @@ var rectAttributes = rects
 	.attr("x", 100)
 	.attr("y", function(d) { return yAxisScale(d.index); } )
 	.attr("width", function(d) { return xAxisScale(d.count); })
-	.attr("height", height/daySeq.length);
+	.attr("height", height/daySeq.length)
+	.attr("fill", green)
+	.attr("opacity", 0.5);
 
