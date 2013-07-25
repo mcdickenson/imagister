@@ -124,19 +124,46 @@ for(var i=0; i<records.length; i++){
 	var ix = daySeq.indexOf((new Date(records[i].Date)).toDateString());
 	dayCounts[ix].count += 1;
 }
-// console.log(dayCounts);
+console.log(dayCounts);
+
+var xAxisScale = d3.scale.linear()
+	.domain([0, 10])
+	.range([0, 100]);
+
+var yAxisScale = d3.scale.linear()
+	.domain([0, 10])
+	.range([0, 90]);
+
+var xAxis = d3.svg.axis()
+	.scale(xAxisScale)
+	.tickValues([0,5])
+	.tickFormat(d3.format(".0f"))
+	.tickSize(5)
+	.orient("bottom");
+
+var yAxis = d3.svg.axis()
+	.scale(yAxisScale)
+	.tickValues([])
+	.tickFormat(d3.format(".0f"))
+	.tickSize(2)
+	.orient("left");
+
+var width=200;
+var height=100;
 
 var svgContainer = d3.select("body").append("svg")
-	.attr("width", 200)
-	.attr("height", 200);
+	.attr("width", width)
+	.attr("height", height);
 
-var line = svgContainer.append("line")
-	.attr("x1", 100)
-	.attr("y1", 0)
-	.attr("x2", 100)
-	.attr("y2", 200)
-	.attr("stroke-with", 2)
-	.attr("stroke", "black");
+svgContainer.append("svg:g")
+	.attr("class", "x axis")
+	.attr("transform", "translate(100,80)")
+	.call( xAxis );
+
+svgContainer.append("svg:g")
+	.attr("class", "y axis")
+	.attr("transform", "translate(100,-10)")
+	.call( yAxis);
 
 var rects = svgContainer.selectAll("rect")
 	.data(dayCounts)
@@ -145,7 +172,8 @@ var rects = svgContainer.selectAll("rect")
 
 var rectAttributes = rects
 	.attr("x", 100)
-	.attr("y", function(d) { return d.index*10; } )
-	.attr("width", function(d) { return d.count*10; })
+	.attr("y", function(d) { return d.index*10+10; } )
+	.attr("width", function(d) { return xAxisScale(d.count); })
 	.attr("height", 10);
+// todo: scaling width by maximum 
 
