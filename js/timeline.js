@@ -1,6 +1,6 @@
 var minDate = new Date("2012-06-01");
 var maxDate = new Date("2012-06-04");
-var height = 100;
+var height = 50;
 var width = 200; 
 var increment = 5; 
 var green = "#7FC97F";
@@ -259,7 +259,7 @@ var gdeltAnti = svgContainer.selectAll(".gdeltAnti")
 	.attr("width", function(d) { return xAxisScale(	d["gdelt"]["anti"]); })
 	.attr("height", height/daySeq.length)
 	.attr("fill", purple)
-	.attr("opacity", 0.5);
+	.attr("opacity", 0.9);
 
 svgContainer.append("svg:g")
 	.attr("class", "x axis")
@@ -275,5 +275,3 @@ svgContainer.append("svg:g")
 	.attr("class", "y axis")
 	.attr("transform", "translate(" + width/2 + ",0)")
 	.call( yAxis);
-
-// todo: put in full test data from testfile.csv
