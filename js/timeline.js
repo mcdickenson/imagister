@@ -236,4 +236,28 @@ var icewsAnti = svgContainer.selectAll(".icewsAnti")
 	.attr("fill", green)
 	.attr("opacity", 0.5);
 
+var gdeltGov = svgContainer.selectAll(".gdeltGov")
+	.data(dayCounts)
+	.enter()
+	.append("rect")
+	.attr("class", "gdeltGov")
+	.attr("x", 100)
+	.attr("y", function(d) { return yAxisScale(d.index); } )
+	.attr("width", function(d) { return xAxisScale(	d["gdelt"]["govt"]); })
+	.attr("height", height/daySeq.length)
+	.attr("fill", purple)
+	.attr("opacity", 0.5);
+
+var gdeltAnti = svgContainer.selectAll(".gdeltAnti")
+	.data(dayCounts)
+	.enter()
+	.append("rect")
+	.attr("class", "gdeltAnti")
+	.attr("x", function(d) { return 100 - xAxisScale(	d["gdelt"]["anti"]);})
+	.attr("y", function(d) { return yAxisScale(d.index); } )
+	.attr("width", function(d) { return xAxisScale(	d["gdelt"]["anti"]); })
+	.attr("height", height/daySeq.length)
+	.attr("fill", purple)
+	.attr("opacity", 0.5);
+
 
