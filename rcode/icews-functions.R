@@ -1,3 +1,5 @@
+require("RJSONIO")
+
 ### ADD ACTORS TO ACTOR COLUMNS BASED ON GREP SEARCH
 grepActor <- function(search, actorname, data)
 {
@@ -45,4 +47,27 @@ subsetICEWS <- function(sender,action,receiver,data,country,startdate=NULL)
   newdata$Country <- country
   newdata$Source <- "ICEWS"
   return(newdata)
+}
+
+### CONVERT ICEWS TO JSON FORMAT
+icewsJSON <- function(data,filename)
+{
+  string <- ""
+  for(row in 1:nrow(data))
+  {
+    string <- paste(string,"{\n",sep="")
+    for(col in 1:ncol(data))
+    {
+      colname <- colnames(data)[col]
+      colval <- data[row,col]
+      ifelse(is.na(as.numeric(colval)),colval <- colval,colval <- as.numeric(colval))
+      if(!is.numeric(colval))
+        colval <- paste('\"',colval,'\"',sep="")
+      string <- paste(string,'"',colname,'\": ',colval,',\n',sep="")
+    }
+    string <- paste(string,"},\n",sep="")
+  }
+  sink(file=filename)
+  cat(string)
+  sink()
 }
