@@ -91,19 +91,38 @@ var records=[
 	}
 ];
 
+var scaledData = [];
+
+var latScale = d3.scale.linear()
+	.domain([29, 31])
+	.range([0, 100]);
+
+var lonScale = d3.scale.linear()
+	.domain([31, 33])
+	.range([0, 100]);
+
+for(var i=0; i<records.length; i++){
+	scaledData[i] = {
+		"Latitude": latScale(records[i].Latitude),
+		"Longitude": lonScale(records[i].Longitude),
+		"Source": records[i].Source
+	}
+};
+console.log(scaledData);
+
 var svgContainer = d3.select("body").append("svg")
-	.attr("width", 400)
-	.attr("height", 400);
+	.attr("width", 100)
+	.attr("height", 100);
 
 var circles = svgContainer.selectAll("circle")
-	.data(records)
+	.data(scaledData)
 	.enter()
 	.append("circle");
 
 var circleAttributes = circles
-	.attr("cx", function(d){ return d.Longitude*10; })
-	.attr("cy", function(d){ return d.Latitude*10; })
-	.attr("r", 2 )
+	.attr("cx", function(d){ return d.Longitude; })
+	.attr("cy", function(d){ return d.Latitude; })
+	.attr("r", 4 )
 	.style("fill", function(d) {
 		if (d.Source==="gdelt") { returnColor="green";
 		} else { returnColor = "purple"; }
