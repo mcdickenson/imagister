@@ -153,20 +153,36 @@ var dayCounts = [];
 for(var i=0; i<daySeq.length; i++){
 	dayCounts[i] = { "date": daySeq[i],
 									 "index": i,
-									 "count": 0 };
+									 "gdelt": {
+									 		"anti": 0,
+									 		"govt" :0
+									 },
+									 "icews": {
+									 		"anti": 0,
+									 		"govt": 0
+									 }
+									};
 }
 
 var countMax = 0; 
 for(var i=0; i<records.length; i++){
 	var ix = daySeq.indexOf((new Date(records[i].Date)).toDateString());
-	dayCounts[ix].count += 1;
-	if(dayCounts[ix].count > countMax){countMax=dayCounts[ix].count;}
+	if( records[i].SenderActor == "anti"){
+		dayCounts[ix][records[i].Source][records[i].SenderActor] -= 1
+	} else {
+		dayCounts[ix][records[i].Source][records[i].SenderActor] += 1
+	}
+	var mag = Math.abs(dayCounts[ix][records[i].Source][records[i].SenderActor]);
+	if( mag > countMax){ countMax=mag; }
 }
 countMaxRounded = Math.ceil(countMax/increment)*increment;
+// console.log(dayCounts);
+// console.log(countMax);
+// console.log(countMaxRounded);
 
 var xAxisScale = d3.scale.linear()
-	.domain([0, countMaxRounded])
-	.range([0, width/2]);
+	.domain([-countMaxRounded, countMaxRounded])
+	.range([-width/2, width/2]);
 
 var yAxisScale = d3.scale.linear()
 	.domain([0, daySeq.length])
@@ -200,16 +216,40 @@ svgContainer.append("svg:g")
 	.attr("transform", "translate(" + width/2 + ",0)")
 	.call( yAxis);
 
-var rects = svgContainer.selectAll("rect")
+var icewsGov = svgContainer.selectAll(".icewsGov")
 	.data(dayCounts)
 	.enter()
-	.append("rect");
-
-var rectAttributes = rects
+	.append("rect")
+	.attr("class", "icewsGov")
 	.attr("x", 100)
 	.attr("y", function(d) { return yAxisScale(d.index); } )
-	.attr("width", function(d) { return xAxisScale(d.count); })
+	.attr("width", function(d) { return xAxisScale(	d["icews"]["govt"]); })
 	.attr("height", height/daySeq.length)
 	.attr("fill", green)
 	.attr("opacity", 0.5);
+
+var icewsAnti = svgContainer.selectAll(".icewsAnti")
+	.data(dayCounts)
+	.enter()
+	.append("rect")
+	.attr("class", "icewsAnti")
+	.attr("x", function(d) { return 100 + xAxisScale(	d["icews"]["anti"]);})
+	.attr("y", function(d) { return yAxisScale(d.index); } )
+	.attr("width", function(d) { return -xAxisScale(	d["icews"]["anti"]); })
+	.attr("height", height/daySeq.length)
+	.attr("fill", green)
+	.attr("opacity", 0.5);
+
+// var rects = svgContainer.selectAll("rect")
+// 	.data(dayCounts)
+// 	.enter()
+// 	.append("rect");
+
+// var rectAttributes = rects
+	// .attr("x", 100)
+	// .attr("y", function(d) { return yAxisScale(d.index); } )
+	// .attr("width", function(d) { return xAxisScale(	d["icews"]["govt"]); })
+	// .attr("height", height/daySeq.length)
+	// .attr("fill", green)
+	// .attr("opacity", 0.5);
 
