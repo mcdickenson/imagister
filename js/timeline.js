@@ -167,12 +167,8 @@ for(var i=0; i<daySeq.length; i++){
 var countMax = 0; 
 for(var i=0; i<records.length; i++){
 	var ix = daySeq.indexOf((new Date(records[i].Date)).toDateString());
-	if( records[i].SenderActor == "anti"){
-		dayCounts[ix][records[i].Source][records[i].SenderActor] -= 1
-	} else {
-		dayCounts[ix][records[i].Source][records[i].SenderActor] += 1
-	}
-	var mag = Math.abs(dayCounts[ix][records[i].Source][records[i].SenderActor]);
+	dayCounts[ix][records[i].Source][records[i].SenderActor] += 1
+	var mag = dayCounts[ix][records[i].Source][records[i].SenderActor];
 	if( mag > countMax){ countMax=mag; }
 }
 countMaxRounded = Math.ceil(countMax/increment)*increment;
@@ -233,23 +229,11 @@ var icewsAnti = svgContainer.selectAll(".icewsAnti")
 	.enter()
 	.append("rect")
 	.attr("class", "icewsAnti")
-	.attr("x", function(d) { return 100 + xAxisScale(	d["icews"]["anti"]);})
+	.attr("x", function(d) { return 100 - xAxisScale(	d["icews"]["anti"]);})
 	.attr("y", function(d) { return yAxisScale(d.index); } )
-	.attr("width", function(d) { return -xAxisScale(	d["icews"]["anti"]); })
+	.attr("width", function(d) { return xAxisScale(	d["icews"]["anti"]); })
 	.attr("height", height/daySeq.length)
 	.attr("fill", green)
 	.attr("opacity", 0.5);
 
-// var rects = svgContainer.selectAll("rect")
-// 	.data(dayCounts)
-// 	.enter()
-// 	.append("rect");
-
-// var rectAttributes = rects
-	// .attr("x", 100)
-	// .attr("y", function(d) { return yAxisScale(d.index); } )
-	// .attr("width", function(d) { return xAxisScale(	d["icews"]["govt"]); })
-	// .attr("height", height/daySeq.length)
-	// .attr("fill", green)
-	// .attr("opacity", 0.5);
 
