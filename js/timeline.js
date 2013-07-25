@@ -1,10 +1,12 @@
 var minDate = new Date("2012-06-01");
 var maxDate = new Date("2012-06-04");
-var height = 50;
+var height = 100;
 var width = 200; 
 var increment = 5; 
-var green = "#7FC97F";
-var purple = "#BEAED4";
+var green = "#7FC97F",
+	icewsColor=green;
+var purple = "#BEAED4",
+	gdeltColor=purple;
 var red = "#FDC086"; 
 
 var records=[
@@ -206,11 +208,11 @@ var yAxis = d3.svg.axis()
 	.scale(yAxisScale)
 	.tickValues([])
 	.tickFormat(d3.format(".0f"))
-	.tickSize(2)
+	.tickSize(0, 0, 0)
 	.orient("left");
 
 var svgContainer = d3.select("body").append("svg")
-	.attr("width", width+50)
+	.attr("width", width)
 	.attr("height", height+50);
 
 var icewsGov = svgContainer.selectAll(".icewsGov")
@@ -222,7 +224,7 @@ var icewsGov = svgContainer.selectAll(".icewsGov")
 	.attr("y", function(d) { return yAxisScale(d.index); } )
 	.attr("width", function(d) { return xAxisScale(	d["icews"]["govt"]); })
 	.attr("height", height/daySeq.length)
-	.attr("fill", green);
+	.attr("fill", icewsColor);
 
 var icewsAnti = svgContainer.selectAll(".icewsAnti")
 	.data(dayCounts)
@@ -233,7 +235,7 @@ var icewsAnti = svgContainer.selectAll(".icewsAnti")
 	.attr("y", function(d) { return yAxisScale(d.index); } )
 	.attr("width", function(d) { return xAxisScale(	d["icews"]["anti"]); })
 	.attr("height", height/daySeq.length)
-	.attr("fill", green);
+	.attr("fill", icewsColor);
 
 var gdeltGov = svgContainer.selectAll(".gdeltGov")
 	.data(dayCounts)
@@ -244,7 +246,7 @@ var gdeltGov = svgContainer.selectAll(".gdeltGov")
 	.attr("y", function(d) { return yAxisScale(d.index); } )
 	.attr("width", function(d) { return xAxisScale(	d["gdelt"]["govt"]); })
 	.attr("height", height/daySeq.length)
-	.attr("fill", purple);
+	.attr("fill", gdeltColor);
 
 var gdeltAnti = svgContainer.selectAll(".gdeltAnti")
 	.data(dayCounts)
@@ -255,7 +257,7 @@ var gdeltAnti = svgContainer.selectAll(".gdeltAnti")
 	.attr("y", function(d) { return yAxisScale(d.index); } )
 	.attr("width", function(d) { return xAxisScale(	d["gdelt"]["anti"]); })
 	.attr("height", height/daySeq.length)
-	.attr("fill", purple);
+	.attr("fill", gdeltColor);
 
 svgContainer.append("svg:g")
 	.attr("class", "x axis")
@@ -272,9 +274,47 @@ svgContainer.append("svg:g")
 	.attr("transform", "translate(" + width/2 + ",0)")
 	.call( yAxis);
 
-// todo: suppress ticks at end of y axis
+var textLabels = [
+	{
+		"lab": "GDELT",
+		"color": gdeltColor,
+		"x": width/3,
+		"y": height+30,
+		"anchor": "middle"
+	}, 
+	{
+		"lab": "ICEWS",
+		"color": icewsColor,
+		"x": 2*width/3,
+		"y": height+30,
+		"anchor": "middle"
+	},
+	{
+		"lab": "Protests",
+		"color": "black",
+		"x": width/4,
+		"y": 10,
+		"anchor": "middle"
+	},
+	{
+		"lab": "Repression",
+		"color": "black",
+		"x": 2*width/3,
+		"y": 10,
+		"anchor": "left"
+	}];
+// console.log(textLabels);
+
+var text = svgContainer.selectAll(".textLabel")
+	.data(textLabels)
+	.enter()
+	.append("text")
+	.attr("class", "textLabel")
+	.attr("x", function(d) { return d.x; })
+	.attr("y", function(d) { return d.y; })
+	.text( function(d) { return d.lab; })
+	.attr("fill", function(d) { return d.color; })
+	.attr("text-anchor", function(d) { return d.anchor; });
+
 // todo: load json remotely
-// todo: add gdelt/icews labels
 // todo: add some date labels
-// todo: add country label
-// todo: add pro/anti-gov label 
