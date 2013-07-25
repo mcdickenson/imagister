@@ -1,5 +1,8 @@
 var minDate = new Date("2012-06-01");
 var maxDate = new Date("2012-06-04");
+var height = 100;
+var width = 200; 
+var increment = 5; 
 
 var records=[
 	{
@@ -91,6 +94,36 @@ var records=[
 		"Longitude": 31.25,
 		"Country": "Egypt",
 		"Source": "icews"
+	},
+	{
+		"SenderActor": "govt",
+		"Action": "repress",
+		"ReceiverActor": "anti",
+		"Date": "2012-06-04",
+		"Latitude": 30.05,
+		"Longitude": 31.25,
+		"Country": "Egypt",
+		"Source": "icews"
+	},
+	{
+		"SenderActor": "govt",
+		"Action": "repress",
+		"ReceiverActor": "anti",
+		"Date": "2012-06-04",
+		"Latitude": 30.05,
+		"Longitude": 31.25,
+		"Country": "Egypt",
+		"Source": "icews"
+	},
+	{
+		"SenderActor": "govt",
+		"Action": "repress",
+		"ReceiverActor": "anti",
+		"Date": "2012-06-04",
+		"Latitude": 30.05,
+		"Longitude": 31.25,
+		"Country": "Egypt",
+		"Source": "icews"
 	}
 ];
 
@@ -120,23 +153,25 @@ for(var i=0; i<daySeq.length; i++){
 									 "count": 0 };
 }
 
+var countMax = 0; 
 for(var i=0; i<records.length; i++){
 	var ix = daySeq.indexOf((new Date(records[i].Date)).toDateString());
 	dayCounts[ix].count += 1;
+	if(dayCounts[ix].count > countMax){countMax=dayCounts[ix].count;}
 }
-console.log(dayCounts);
+countMaxRounded = Math.ceil(countMax/increment)*increment;
 
 var xAxisScale = d3.scale.linear()
-	.domain([0, 10])
-	.range([0, 100]);
+	.domain([0, countMaxRounded])
+	.range([0, width/2]);
 
 var yAxisScale = d3.scale.linear()
-	.domain([0, 10])
-	.range([0, 90]);
+	.domain([0, daySeq.length])
+	.range([0, height]);
 
 var xAxis = d3.svg.axis()
 	.scale(xAxisScale)
-	.tickValues([0,5])
+	.ticks(Math.ceil(countMax/increment))
 	.tickFormat(d3.format(".0f"))
 	.tickSize(5)
 	.orient("bottom");
@@ -148,21 +183,18 @@ var yAxis = d3.svg.axis()
 	.tickSize(2)
 	.orient("left");
 
-var width=200;
-var height=100;
-
 var svgContainer = d3.select("body").append("svg")
-	.attr("width", width)
-	.attr("height", height);
+	.attr("width", width+50)
+	.attr("height", height+50);
 
 svgContainer.append("svg:g")
 	.attr("class", "x axis")
-	.attr("transform", "translate(100,80)")
+	.attr("transform", "translate(" + (width/2) + "," + (height) + ")")
 	.call( xAxis );
 
 svgContainer.append("svg:g")
 	.attr("class", "y axis")
-	.attr("transform", "translate(100,-10)")
+	.attr("transform", "translate(" + width/2 + ",0)")
 	.call( yAxis);
 
 var rects = svgContainer.selectAll("rect")
@@ -172,8 +204,7 @@ var rects = svgContainer.selectAll("rect")
 
 var rectAttributes = rects
 	.attr("x", 100)
-	.attr("y", function(d) { return d.index*10+10; } )
+	.attr("y", function(d) { return yAxisScale(d.index); } )
 	.attr("width", function(d) { return xAxisScale(d.count); })
-	.attr("height", 10);
-// todo: scaling width by maximum 
+	.attr("height", height/daySeq.length);
 
