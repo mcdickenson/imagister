@@ -177,16 +177,27 @@ countMaxRounded = Math.ceil(countMax/increment)*increment;
 // console.log(countMaxRounded);
 
 var xAxisScale = d3.scale.linear()
-	.domain([-countMaxRounded, countMaxRounded])
-	.range([-width/2, width/2]);
+	.domain([0, countMaxRounded])
+	.range([0, width/2]);
+
+var xAxisScaleNeg = d3.scale.linear()
+	.domain([countMaxRounded, 0])
+	.range([-width/2, 0]);
 
 var yAxisScale = d3.scale.linear()
 	.domain([0, daySeq.length])
 	.range([0, height]);
 
-var xAxis = d3.svg.axis()
+var xAxisRight = d3.svg.axis()
 	.scale(xAxisScale)
-	.ticks(Math.ceil(countMax/increment))
+	.ticks(3)
+	.tickFormat(d3.format(".0f"))
+	.tickSize(5)
+	.orient("bottom");
+
+var xAxisLeft = d3.svg.axis()
+	.scale(xAxisScaleNeg)
+	.ticks(3)
 	.tickFormat(d3.format(".0f"))
 	.tickSize(5)
 	.orient("bottom");
@@ -201,16 +212,6 @@ var yAxis = d3.svg.axis()
 var svgContainer = d3.select("body").append("svg")
 	.attr("width", width+50)
 	.attr("height", height+50);
-
-svgContainer.append("svg:g")
-	.attr("class", "x axis")
-	.attr("transform", "translate(" + (width/2) + "," + (height) + ")")
-	.call( xAxis );
-
-svgContainer.append("svg:g")
-	.attr("class", "y axis")
-	.attr("transform", "translate(" + width/2 + ",0)")
-	.call( yAxis);
 
 var icewsGov = svgContainer.selectAll(".icewsGov")
 	.data(dayCounts)
@@ -260,4 +261,19 @@ var gdeltAnti = svgContainer.selectAll(".gdeltAnti")
 	.attr("fill", purple)
 	.attr("opacity", 0.5);
 
+svgContainer.append("svg:g")
+	.attr("class", "x axis")
+	.attr("transform", "translate(" + (width/2) + "," + (height) + ")")
+	.call( xAxisRight );
 
+svgContainer.append("svg:g")
+	.attr("class", "x axis left")
+	.attr("transform", "translate(" + (width/2) + "," + (height) + ")")
+	.call( xAxisLeft );
+
+svgContainer.append("svg:g")
+	.attr("class", "y axis")
+	.attr("transform", "translate(" + width/2 + ",0)")
+	.call( yAxis);
+
+// todo: put in full test data from testfile.csv
