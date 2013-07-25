@@ -1,4 +1,14 @@
-var counts = [30, 20, 10];
+var counts = [
+	{
+		"count": 10
+	},
+	{
+		"count": 20 
+	},
+	{
+		"count": 30
+	}
+];
 
 var toLeftX = function(d){
 	return 100-d;
@@ -33,7 +43,7 @@ var rects = svgContainer.selectAll("rect")
 	.append("rect");
 
 var rectAttributes = rects
-	.attr("x", leftOrRight )
-	.attr("y", function(d) { return d*2; } )
-	.attr("width", function(d) { return d; })
+	.attr("x", function(d) { return leftOrRight(d.count)})
+	.attr("y", function(d) { return d.count*2; } )
+	.attr("width", function(d) { return d.count; })
 	.attr("height", 10);
