@@ -174,9 +174,6 @@ for(var i=0; i<records.length; i++){
 	if( mag > countMax){ countMax=mag; }
 }
 countMaxRounded = Math.ceil(countMax/increment)*increment;
-// console.log(dayCounts);
-// console.log(countMax);
-// console.log(countMaxRounded);
 
 var xAxisScale = d3.scale.linear()
 	.domain([0, countMaxRounded])
@@ -303,7 +300,6 @@ var textLabels = [
 		"y": 10,
 		"anchor": "left"
 	}];
-// console.log(textLabels);
 
 var text = svgContainer.selectAll(".textLabel")
 	.data(textLabels)
