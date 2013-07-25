@@ -222,8 +222,7 @@ var icewsGov = svgContainer.selectAll(".icewsGov")
 	.attr("y", function(d) { return yAxisScale(d.index); } )
 	.attr("width", function(d) { return xAxisScale(	d["icews"]["govt"]); })
 	.attr("height", height/daySeq.length)
-	.attr("fill", green)
-	.attr("opacity", 0.5);
+	.attr("fill", green);
 
 var icewsAnti = svgContainer.selectAll(".icewsAnti")
 	.data(dayCounts)
@@ -234,8 +233,7 @@ var icewsAnti = svgContainer.selectAll(".icewsAnti")
 	.attr("y", function(d) { return yAxisScale(d.index); } )
 	.attr("width", function(d) { return xAxisScale(	d["icews"]["anti"]); })
 	.attr("height", height/daySeq.length)
-	.attr("fill", green)
-	.attr("opacity", 0.5);
+	.attr("fill", green);
 
 var gdeltGov = svgContainer.selectAll(".gdeltGov")
 	.data(dayCounts)
@@ -246,8 +244,7 @@ var gdeltGov = svgContainer.selectAll(".gdeltGov")
 	.attr("y", function(d) { return yAxisScale(d.index); } )
 	.attr("width", function(d) { return xAxisScale(	d["gdelt"]["govt"]); })
 	.attr("height", height/daySeq.length)
-	.attr("fill", purple)
-	.attr("opacity", 0.5);
+	.attr("fill", purple);
 
 var gdeltAnti = svgContainer.selectAll(".gdeltAnti")
 	.data(dayCounts)
@@ -258,8 +255,7 @@ var gdeltAnti = svgContainer.selectAll(".gdeltAnti")
 	.attr("y", function(d) { return yAxisScale(d.index); } )
 	.attr("width", function(d) { return xAxisScale(	d["gdelt"]["anti"]); })
 	.attr("height", height/daySeq.length)
-	.attr("fill", purple)
-	.attr("opacity", 0.9);
+	.attr("fill", purple);
 
 svgContainer.append("svg:g")
 	.attr("class", "x axis")
@@ -275,3 +271,10 @@ svgContainer.append("svg:g")
 	.attr("class", "y axis")
 	.attr("transform", "translate(" + width/2 + ",0)")
 	.call( yAxis);
+
+// todo: suppress ticks at end of y axis
+// todo: load json remotely
+// todo: add gdelt/icews labels
+// todo: add some date labels
+// todo: add country label
+// todo: add pro/anti-gov label 
