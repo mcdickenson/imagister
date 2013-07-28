@@ -60,14 +60,17 @@ icewsJSON <- function(data,filename)
     {
       colname <- colnames(data)[col]
       colval <- data[row,col]
-      ifelse(is.na(as.numeric(colval)),colval <- colval,colval <- as.numeric(colval))
-      if(!is.numeric(colval))
+      #ifelse(is.na(as.numeric(colval)),colval <- colval,colval <- as.numeric(colval))
+      #if(!is.numeric(colval))
         colval <- paste('\"',colval,'\"',sep="")
-      string <- paste(string,'"',colname,'\": ',colval,',\n',sep="")
+      ifelse(col == ncol(data),endline <- "\n",endline <- ",\n")
+      string <- paste(string,'"',colname,'\": ',colval,endline,sep="")
     }
     string <- paste(string,"},\n",sep="")
   }
   sink(file=filename)
-  cat(string)
+  cat("[\n")
+  cat(substr(string,1,nchar(string)-2))
+  cat("\n]")
   sink()
 }
