@@ -7,7 +7,7 @@ var green = "#7FC97F",
 	icewsColor=green;
 var purple = "#BEAED4",
 	gdeltColor=purple;
-var red = "#FDC086"; 
+var red = "#FDC086";
 
 var records; 
 d3.json("data/testfile.json", function(error, json){
