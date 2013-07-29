@@ -243,10 +243,11 @@ var visualize = function(records){
 		.style("opacity", 0);
 
 	function zoomed(){
-		// console.log(d3.event.translate);
-		// console.log(d3.event.scale);
 		var t = d3.event.translate,
 			s = d3.event.scale;
+		t[1] = Math.min(t[1], 0);
+		t[1] = Math.max(t[1], height-(yAxisScale(maxDate)*s) );
+		zoom.translate(t);
 		svgContainer.select(".y.axis").call(yAxis);
 		svgContainer.select(".x.axis").call(xAxisRight);
 		svgContainer.select(".x.axis.left").call(xAxisLeft);
