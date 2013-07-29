@@ -3,9 +3,6 @@ function initialize(){
 	var user_name = "mcdickenson";
 	var table_name = "gdelt_icews_20130725";
 	var column_name = "date";
-	// var user_name = "viz2";
-	// var table_name = "ow";
-	// var column_name = "date";
 
 	// google map
 	// centered on cairo
@@ -17,7 +14,7 @@ function initialize(){
 		minZoom:3,
 		scrollwheel: true,
 		panControl: false,
-		zoomControl: true,
+		zoomControl: false,
 		streetViewControl: false,
 		overviewMapControl: false
 	});
@@ -78,8 +75,6 @@ function initialize(){
 		point_type:'circle',
 		cellsize:3
 	}
-
-
 
 	var torque = null;
 	Torque(function(env){
