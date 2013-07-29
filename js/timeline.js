@@ -1,6 +1,6 @@
 var minDate = new Date("2012-06-01");
 var maxDate = new Date("2013-07-08");
-var height = 600;
+var height = 1200;
 var width = 400; 
 var increment = 5; 
 var green = "#7FC97F",
@@ -145,30 +145,20 @@ var visualize = function(records){
 					col=icewsColor;
 				}
 				return col;
-			});
-
-	// var icewsGov = svgContainer.selectAll(".icewsGov")
-	// 		.data(dayCounts)
-	// 	.enter().append("rect")
-	// 		.attr("class", "icewsGov")
-	// 		.attr("x", width/2)
-	// 		.attr("y", function(d) { return yAxisScale(d.date) + h; } )
-	// 		.attr("width", function(d) { return xAxisScale(	d["icews"]["govt"]); })
-	// 		.attr("height", h)
-	// 		.attr("fill", icewsColor)
-	// 	.on("mouseover", function(d){
-	// 		tooltip.transition()
-	// 			.duration(200)
-	// 			.style("opacity", .9)
-	// 		tooltip.html(formatTime(d.date) + "<br/>" + d["icews"]["govt"] + " repressive acts")
-	// 			.style("left", (d3.event.pageX ) +"px")
-	// 			.style("top", (d3.event.pageY ) +"px") 
-	// 		})
-	// 	.on("mouseout", function(d){
-	// 		tooltip.transition()
-	// 			.duration(400)
-	// 			.style("opacity", 0)
-	// 	});
+			})
+		.on("mouseover", function(d){
+			tooltip.transition()
+				.duration(200)
+				.style("opacity", .9)
+			tooltip.html(formatTime(d.date) + "<br/>" + d.count + " events (" + d.source.toUpperCase() + ")")
+				.style("left", (d3.event.pageX ) +"px")
+				.style("top", (d3.event.pageY ) +"px") 
+		})
+		.on("mouseout", function(d){
+			tooltip.transition()
+				.duration(400)
+				.style("opacity", 0)
+		});
 
 	svgContainer.append("svg:g")
 		.attr("class", "x axis")
