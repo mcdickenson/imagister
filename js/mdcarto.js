@@ -1,11 +1,11 @@
 var gui;
 function initialize(){
-	// var user_name = "mcdickenson";
-	// var table_name = "gdelt_icews_20130725";
-	// var column_name = "date";
-	var user_name = "viz2";
-	var table_name = "ow";
+	var user_name = "mcdickenson";
+	var table_name = "gdelt_icews_20130725";
 	var column_name = "date";
+	// var user_name = "viz2";
+	// var table_name = "ow";
+	// var column_name = "date";
 
 	// google map
 	// centered on cairo
@@ -50,20 +50,36 @@ function initialize(){
 	map.setMapTypeId(google.maps.MapTypeId.ROADMAP);
 	map.setOptions({styles:map_style.google_maps_customization_style});
 
+  var blend_modes = [
+    "lighter",
+    "source-over",
+    "copy",
+    "destination-atop",
+    "destination-in",
+    "destination-out",
+    "destination-over",
+    "source-atop",
+    "source-in",
+    "source-out",
+    "xor"
+	];
+
 	var TorqueOptions = {
 		user: user_name,
 		table: table_name,
 		column: column_name,
 		cumulative: false,
-		resolution: 2,
+		resolution: 3,
 		fps: 12,
 		fitbounds: false,
 		clock: true,
-		blendmode: 'lighter',
+		blendmode: blend_modes[1],
 		trails: true,
 		point_type:'circle',
-		cellsize:1
+		cellsize:3
 	}
+
+
 
 	var torque = null;
 	Torque(function(env){
