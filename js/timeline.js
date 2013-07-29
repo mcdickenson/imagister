@@ -84,7 +84,7 @@ var visualize = function(records){
 
 	var yAxisScale = d3.time.scale()
 		.domain([minDate, maxDate])
-		.range([0, height]);
+		.range([margin.top, height]);
 
 	var xAxisRight = d3.svg.axis()
 		.scale(xAxisScale)
@@ -102,7 +102,7 @@ var visualize = function(records){
 
 	var yAxis = d3.svg.axis()
 		.scale(yAxisScale)
-		.ticks(d3.time.years, 1)
+		.ticks(d3.time.months, 1)
 		.orient("left")
 		.tickSize(50, 0, 0);
 
@@ -197,14 +197,14 @@ var visualize = function(records){
 			"lab": "Protests",
 			"color": "black",
 			"x": width/4,
-			"y": 10,
+			"y": 0,
 			"anchor": "middle"
 		},
 		{
 			"lab": "Repression",
 			"color": "black",
 			"x": 3*width/4,
-			"y": 10,
+			"y": 0,
 			"anchor": "middle"
 		}];
 
