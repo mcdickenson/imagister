@@ -162,20 +162,6 @@ var visualize = function(records){
 
 	var textLabels = [
 		{
-			"lab": "GDELT",
-			"color": gdeltColor,
-			"x": width/3,
-			"y": height+40,
-			"anchor": "middle"
-		}, 
-		{
-			"lab": "ICEWS",
-			"color": icewsColor,
-			"x": 2*width/3,
-			"y": height+40,
-			"anchor": "middle"
-		},
-		{
 			"lab": "Protests",
 			"color": "black",
 			"x": width/4,

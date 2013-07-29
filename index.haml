@@ -6,20 +6,20 @@
 		}
 		.axis path,
 		.axis line {
-		    fill: none;
-		    stroke: black;
-		    shape-rendering: crispEdges;
+		  fill: none;
+		  stroke: black;
+		  shape-rendering: crispEdges;
 		}
 		.axis text {
-		    font-family: sans-serif;
-		    font-size: 10px;
+		  font-family: sans-serif;
+		  font-size: 10px;
 		}
 		rect{
 			opacity: 0.95; 
 		}
 		.textLabel {
-		    font-family: sans-serif;
-		    font-size: 20px;
+		  font-family: sans-serif;
+		  font-size: 20px;
 		}
 	%head
 		%title Imagister
@@ -27,5 +27,11 @@
 		%h1 Hello world!
 		%script{src: "d3/d3.v3.min.js", type: "text/javascript"}
 		%h2
-			Egypt
+			Egypt: 
+			%font{style: "color:#BEAED4"}
+				GDELT
+			and
+			%font{style: "color:#7FC97F"}
+				ICEWS
+
 		%script{src: "js/timeline.js", type: "text/javascript"}
