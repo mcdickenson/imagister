@@ -1,7 +1,13 @@
 var minDate = new Date("2012-06-01");
 var maxDate = new Date("2013-07-08");
-var height = 1200;
-var width = 400; 
+var margin = {
+	top: 20,
+	bottom: 20,
+	left: 30,
+	right: 30
+};
+var height = 1200 - margin.top - margin.bottom;
+var width = 400 - margin.left - margin.right; 
 var increment = 5; 
 var green = "#7FC97F",
 	icewsColor=green;
@@ -67,7 +73,6 @@ var visualize = function(records){
 				});
 			});
 		});
-	// console.log(series);
 
 	var xAxisScale = d3.scale.linear()
 		.domain([0, countMaxRounded])
@@ -99,13 +104,25 @@ var visualize = function(records){
 		.scale(yAxisScale)
 		.ticks(d3.time.years, 1)
 		.orient("left")
-		.tickSize(0, 0, 0);
+		.tickSize(50, 0, 0);
+
+	var zoom = d3.behavior.zoom()
+		.y(yAxisScale)
+		.scaleExtent([1, 10])
+		.on("zoom", zoomed);
 
 	var svgContainer = d3.select("body").append("svg")
-		.attr("width", width+40)
-		.attr("height", height+60)
+			.attr("width", width + margin.left + margin.right)
+			.attr("height", height + margin.top + margin.bottom)
 		.append("g")
-			.attr("transform", "translate(30,20)");
+			.attr("transform", "translate("+margin.left+","+margin.top+")")
+			.call(zoom);
+
+	svgContainer.append("svg:rect")
+		.attr("width", width)
+		.attr("height", height)
+		.attr("class", "plot")
+		.attr("fill", "#fff");
 
 	var h = (height/daySeq.length)*0.5;
 
@@ -160,17 +177,17 @@ var visualize = function(records){
 				.style("opacity", 0)
 		});
 
-	svgContainer.append("svg:g")
+	svgContainer.append("g")
 		.attr("class", "x axis")
 		.attr("transform", "translate(" + (width/2) + "," + (height) + ")")
 		.call( xAxisRight );
 
-	svgContainer.append("svg:g")
+	svgContainer.append("g")
 		.attr("class", "x axis left")
 		.attr("transform", "translate(" + (width/2) + "," + (height) + ")")
 		.call( xAxisLeft );
 
-	svgContainer.append("svg:g")
+	svgContainer.append("g")
 		.attr("class", "y axis")
 		.attr("transform", "translate(" + width/2 + ",0)")
 		.call( yAxis);
@@ -224,4 +241,17 @@ var visualize = function(records){
 		.attr("class", "tooltip")
 		.style("opacity", 0);
 
+	function zoomed(){
+		// console.log(d3.event.scale);
+		svgContainer.select(".y.axis").call(yAxis);
+		svgContainer.select(".x.axis").call(xAxisRight);
+		svgContainer.select(".x.axis.left").call(xAxisLeft);
+		rects.attr("y", function(d){ 
+				var dy = yAxisScale(d.date);
+				if(d.source=="icews"){ dy = dy + (h*d3.event.scale); }
+				return dy; 
+			})
+			.attr("height", h*d3.event.scale);		
+		datelabs.attr("y", function(d){ return yAxisScale(d.date); })
+	}
 }
