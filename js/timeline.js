@@ -37,8 +37,7 @@ var daySeq = getDates(minDate, maxDate);
 var dayCounts = [];
 
 for(var i=0; i<daySeq.length; i++){
-	dayCounts[i] = { "date": daySeq[i],
-									 "index": i,
+	dayCounts[i] = { "date": new Date(daySeq[i]),
 									 "gdelt": {
 									 		"anti": 0,
 									 		"govt" :0
@@ -53,7 +52,7 @@ for(var i=0; i<daySeq.length; i++){
 var visualize = function(records){
 	var countMax = 0; 
 	for(var i=0; i<records.length; i++){
-		var ix = daySeq.indexOf((new Date(records[i].Date)).toDateString());
+		var ix = daySeq.indexOf((new Date(records[i].Date)).toDateString() );
 		dayCounts[ix][records[i].Source][records[i].SenderActor] += 1
 		var mag = dayCounts[ix][records[i].Source][records[i].SenderActor];
 		if( mag > countMax){ countMax=mag; }
@@ -66,10 +65,10 @@ var visualize = function(records){
 
 	var xAxisScaleNeg = d3.scale.linear()
 		.domain([countMaxRounded, 0])
-		.range([-width/2, 00]);
+		.range([-width/2, 0]);
 
-	var yAxisScale = d3.scale.linear()
-		.domain([0, daySeq.length])
+	var yAxisScale = d3.time.scale()
+		.domain([minDate, maxDate])
 		.range([0, height]);
 
 	var xAxisRight = d3.svg.axis()
@@ -88,10 +87,9 @@ var visualize = function(records){
 
 	var yAxis = d3.svg.axis()
 		.scale(yAxisScale)
-		.tickValues([])
-		.tickFormat(d3.format(".0f"))
-		.tickSize(0, 0, 0)
-		.orient("left");
+		.ticks(d3.time.years, 1)
+		.orient("left")
+		.tickSize(0, 0, 0);
 
 	var svgContainer = d3.select("body").append("svg")
 		.attr("width", width+40)
@@ -107,7 +105,7 @@ var visualize = function(records){
 		.append("rect")
 		.attr("class", "icewsGov")
 		.attr("x", width/2)
-		.attr("y", function(d) { return yAxisScale(d.index)+h; } )
+		.attr("y", function(d) { return yAxisScale(d.date) + h; } )
 		.attr("width", function(d) { return xAxisScale(	d["icews"]["govt"]); })
 		.attr("height", h)
 		.attr("fill", icewsColor);
@@ -118,7 +116,7 @@ var visualize = function(records){
 		.append("rect")
 		.attr("class", "icewsAnti")
 		.attr("x", function(d) { return (width/2) - xAxisScale(	d["icews"]["anti"]);})
-		.attr("y", function(d) { return yAxisScale(d.index)+h; } )
+		.attr("y", function(d) { return yAxisScale(d.date) + h; } )
 		.attr("width", function(d) { return xAxisScale(	d["icews"]["anti"]); })
 		.attr("height", h)
 		.attr("fill", icewsColor);
@@ -129,7 +127,7 @@ var visualize = function(records){
 		.append("rect")
 		.attr("class", "gdeltGov")
 		.attr("x", width/2)
-		.attr("y", function(d) { return yAxisScale(d.index); } )
+		.attr("y", function(d) { return yAxisScale(d.date); } )
 		.attr("width", function(d) { return xAxisScale(	d["gdelt"]["govt"]); })
 		.attr("height", h)
 		.attr("fill", gdeltColor);
@@ -140,7 +138,7 @@ var visualize = function(records){
 		.append("rect")
 		.attr("class", "gdeltAnti")
 		.attr("x", function(d) { return width/2 - xAxisScale(	d["gdelt"]["anti"]);})
-		.attr("y", function(d) { return yAxisScale(d.index); } )
+		.attr("y", function(d) { return yAxisScale(d.date); } )
 		.attr("width", function(d) { return xAxisScale(	d["gdelt"]["anti"]); })
 		.attr("height", h)
 		.attr("fill", gdeltColor);
@@ -171,9 +169,9 @@ var visualize = function(records){
 		{
 			"lab": "Repression",
 			"color": "black",
-			"x": 2*width/3,
+			"x": 3*width/4,
 			"y": 10,
-			"anchor": "left"
+			"anchor": "middle"
 		}];
 
 	var text = svgContainer.selectAll(".textLabel")
