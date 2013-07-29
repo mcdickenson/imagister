@@ -181,9 +181,26 @@ var visualize = function(records){
 		.attr("class", "textLabel")
 		.attr("x", function(d) { return d.x; })
 		.attr("y", function(d) { return d.y; })
-		.text( function(d) { return d.lab; })
 		.attr("fill", function(d) { return d.color; })
-		.attr("text-anchor", function(d) { return d.anchor; });
-}
+		.attr("text-anchor", function(d) { return d.anchor; })
+		.text( function(d) { return d.lab; });
 
-// todo: add some date labels
+	var dateLabels = [
+		{
+			"date": new Date("2012-07-04"),
+			"text": "July 4",
+			"anchor": "left"
+		}];
+	console.log(dateLabels);
+
+	var datelabs = svgContainer.selectAll(".dateLabel")
+		.data(dateLabels)
+		.enter()
+		.append("text")
+		.attr("class", "dateLabel")
+		.attr("x", width/2+10)
+		.attr("y", function(d){ return yAxisScale(d.date); })
+		.attr("fill", "black")
+		.attr("text-anchor", function(d){ return d.anchor })
+		.text(function(d) { return d.text; });
+}
