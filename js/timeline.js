@@ -1,6 +1,6 @@
 var minDate = new Date("2012-06-01");
 var maxDate = new Date("2013-07-08");
-var height = 500;
+var height = 1200;
 var width = 400; 
 var increment = 5; 
 var green = "#7FC97F",
@@ -99,15 +99,17 @@ var visualize = function(records){
 		.append("g")
 			.attr("transform", "translate(30,20)");
 
+	var h = (height/daySeq.length) * 0.5;
+
 	var icewsGov = svgContainer.selectAll(".icewsGov")
 		.data(dayCounts)
 		.enter()
 		.append("rect")
 		.attr("class", "icewsGov")
 		.attr("x", width/2)
-		.attr("y", function(d) { return yAxisScale(d.index); } )
+		.attr("y", function(d) { return yAxisScale(d.index)+h; } )
 		.attr("width", function(d) { return xAxisScale(	d["icews"]["govt"]); })
-		.attr("height", height/daySeq.length)
+		.attr("height", h)
 		.attr("fill", icewsColor);
 
 	var icewsAnti = svgContainer.selectAll(".icewsAnti")
@@ -116,9 +118,9 @@ var visualize = function(records){
 		.append("rect")
 		.attr("class", "icewsAnti")
 		.attr("x", function(d) { return (width/2) - xAxisScale(	d["icews"]["anti"]);})
-		.attr("y", function(d) { return yAxisScale(d.index); } )
+		.attr("y", function(d) { return yAxisScale(d.index)+h; } )
 		.attr("width", function(d) { return xAxisScale(	d["icews"]["anti"]); })
-		.attr("height", height/daySeq.length)
+		.attr("height", h)
 		.attr("fill", icewsColor);
 
 	var gdeltGov = svgContainer.selectAll(".gdeltGov")
@@ -129,7 +131,7 @@ var visualize = function(records){
 		.attr("x", width/2)
 		.attr("y", function(d) { return yAxisScale(d.index); } )
 		.attr("width", function(d) { return xAxisScale(	d["gdelt"]["govt"]); })
-		.attr("height", height/daySeq.length)
+		.attr("height", h)
 		.attr("fill", gdeltColor);
 
 	var gdeltAnti = svgContainer.selectAll(".gdeltAnti")
@@ -140,7 +142,7 @@ var visualize = function(records){
 		.attr("x", function(d) { return width/2 - xAxisScale(	d["gdelt"]["anti"]);})
 		.attr("y", function(d) { return yAxisScale(d.index); } )
 		.attr("width", function(d) { return xAxisScale(	d["gdelt"]["anti"]); })
-		.attr("height", height/daySeq.length)
+		.attr("height", h)
 		.attr("fill", gdeltColor);
 
 	svgContainer.append("svg:g")
