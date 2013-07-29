@@ -5,13 +5,14 @@ function initialize(){
 	var column_name = "date";
 
 	// google map
+	// centered on cairo
 	// todo: try out different base maps (dark)
 	var map = new google.maps.Map(document.getElementById('map_canvas'), {
-		center:new google.maps.LatLng(30.95940879245423, -0.609375),
-		zoom:2,
-		mapTypeId:google.maps.MapTypeId.SATELLITE,
+		center:new google.maps.LatLng(30.05, 31.226),
+		zoom:5,
+		mapTypeId:google.maps.MapTypeId.ROADMAP,
 		mapTypeControl:false,
-		minZoom:1,
+		minZoom:3,
 		scrollwheel: true,
 		panControl: false,
 		zoomControl: true,
