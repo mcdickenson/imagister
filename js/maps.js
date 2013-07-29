@@ -24,6 +24,8 @@ var hexbin = d3.hexbin()
     .size([width, height])
     .radius(10);
 
+var points = new Array();
+
 // var randomX = d3.random.normal(31, 5),
 //     randomY = d3.random.normal(28, 5),
 //     points = d3.range(2000).map(function() { return projection([randomX(), randomY()]); });
@@ -34,7 +36,7 @@ plotmap = function(collection)
   .data(collection.features)
   .enter().append('path')
   .attr('d', d3.geo.path().projection(projection))
-  .style('fill', 'gray')
+  .style('fill', '#66CD00')
   .style('stroke', 'white')
   .style('stroke-width', 1);
 };
@@ -51,7 +53,7 @@ plotcircles = function(collection)
   .attr("r", 5);
 };
 
-visualize = function(collection)
+plothex = function(collection)
 {
   // points = [collection.Latitude,collection.Longitude]
   // var points = [[collection.Latitude, collection.Longitude]];
@@ -77,13 +79,17 @@ d3.json('data/EGY_adm0.json', function(collection)
 d3.json('data/testfile.json', function(collection)
 {
   // points = projection([collection.Latitude,collection.Longitude]);
-  var points = new Array();
   for(i in collection)
   {
     points[i] = projection([collection[i].Longitude,collection[i].Latitude]);
   }
-  plotcircles(points);
+  // plotcircles(points);
 });
+
+function drawcircles()
+{
+  plotcircles(points);
+}
 
 // );
 
