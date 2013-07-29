@@ -109,6 +109,7 @@ var visualize = function(records){
 	var zoom = d3.behavior.zoom()
 		.y(yAxisScale)
 		.scaleExtent([1, 10])
+		.translate([0, 0])
 		.on("zoom", zoomed);
 
 	var svgContainer = d3.select("body").append("svg")
@@ -242,16 +243,19 @@ var visualize = function(records){
 		.style("opacity", 0);
 
 	function zoomed(){
+		// console.log(d3.event.translate);
 		// console.log(d3.event.scale);
+		var t = d3.event.translate,
+			s = d3.event.scale;
 		svgContainer.select(".y.axis").call(yAxis);
 		svgContainer.select(".x.axis").call(xAxisRight);
 		svgContainer.select(".x.axis.left").call(xAxisLeft);
 		rects.attr("y", function(d){ 
 				var dy = yAxisScale(d.date);
-				if(d.source=="icews"){ dy = dy + (h*d3.event.scale); }
+				if(d.source=="icews"){ dy = dy + (h*s); }
 				return dy; 
 			})
-			.attr("height", h*d3.event.scale);		
+			.attr("height", h*s);		
 		datelabs.attr("y", function(d){ return yAxisScale(d.date); })
 	}
 }
