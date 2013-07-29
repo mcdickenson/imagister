@@ -10,4 +10,5 @@ icewsSYR <- grepAction(c("military force","blockade","Occupy territory","small a
 newdata <- subsetICEWS("govt","fight","anti",icewsSYR,"Syria","2012-06-01")
 newdata <- rbind(newdata,subsetICEWS("anti","fight","govt",icewsSYR,"Syria","2012-06-01"))
 
-write.csv(newdata,"../data/icews_syria.csv",row.names=F)
+#write.csv(newdata,"../data/icews_syria.csv",row.names=F)
+icewsJSON(newdata,"../data/icews_syria.json")

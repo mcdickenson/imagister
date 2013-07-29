@@ -6,17 +6,48 @@
 		}
 		.axis path,
 		.axis line {
-		    fill: none;
-		    stroke: black;
-		    shape-rendering: crispEdges;
+		  fill: none;
+		  stroke: #787878;
+		  shape-rendering: crispEdges;
 		}
 		.axis text {
-		    font-family: sans-serif;
-		    font-size: 10px;
+		  font-family: sans-serif;
+		  font-size: 12px;
+		}
+		rect{
+			opacity: 0.95; 
+		}
+		.textLabel {
+		  font-family: sans-serif;
+		  font-size: 20px;
+		}
+		.dateLabel {
+		  font-family: sans-serif;
+		  font-size: 12px;
+		}
+		.tooltip {
+			position: absolute;
+			text-align: center;
+			width: 120px;
+			height: 28px;
+			padding: 2px;
+			font: 10px sans-serif;
+			background: lightsteelblue;
+			border: 0px;
+			border-radius: 8px;
+			pointer-events: none;
 		}
 	%head
 		%title Imagister
 	%body
 		%h1 Hello world!
 		%script{src: "d3/d3.v3.min.js", type: "text/javascript"}
+		%h2
+			Egypt: 
+			%font{style: "color:#BEAED4"}
+				GDELT
+			and
+			%font{style: "color:#7FC97F"}
+				ICEWS
+
 		%script{src: "js/timeline.js", type: "text/javascript"}
