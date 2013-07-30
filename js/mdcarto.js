@@ -89,7 +89,7 @@ function initialize(){
 		cumulative: false,
 		steps:450,
 		resolution: 3,
-		fps: 20,
+		fps: 18,
 		fitbounds: false,
 		clock: true,
 		blendmode: blend_modes[1],
