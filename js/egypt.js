@@ -1,14 +1,17 @@
 var minDate = new Date("2012-06-01");
 var maxDate = new Date("2013-07-08");
 var margin = {
-	top: 20,
+	top: 30,
 	bottom: 20,
 	left: 30,
 	right: 30
 };
 var height = 600 - margin.top - margin.bottom;
-var width = 400 - margin.left - margin.right; 
+var widthTimeline = 400 - margin.left,
+	widthMap = 600 - margin.right,
+	widthTotal = widthTimeline + widthMap;
 var increment = 5; 
+
 var orange = "#FECC5C",
 	blue = "#41B6C4";
 	green = "#7FC97F",
@@ -78,11 +81,11 @@ var visualize = function(records){
 
 	var xAxisScale = d3.scale.linear()
 		.domain([0, countMaxRounded])
-		.range([0, width/2]);
+		.range([0, widthTimeline/2]);
 
 	var xAxisScaleNeg = d3.scale.linear()
 		.domain([countMaxRounded, 0])
-		.range([-width/2, 0]);
+		.range([-widthTimeline/2, 0]);
 
 	var yAxisScale = d3.time.scale()
 		.domain([minDate, maxDate])
@@ -115,14 +118,15 @@ var visualize = function(records){
 		.on("zoom", zoomed);
 
 	var svgTimeline = d3.select("body").append("svg")
-			.attr("width", width + margin.left + margin.right)
+			.attr("width", widthTimeline + margin.left)
 			.attr("height", height + margin.top + margin.bottom)
+			.attr("id", "timeline")
 		.append("g")
-			.attr("transform", "translate("+margin.left+","+margin.top+")")
+			.attr("transform", "translate("+margin.top+","+margin.left+")")
 			.call(zoom);
 
 	svgTimeline.append("svg:rect")
-		.attr("width", width)
+		.attr("width", widthTimeline)
 		.attr("height", height)
 		.attr("class", "plot")
 		.attr("fill", "#fff");
@@ -144,9 +148,9 @@ var visualize = function(records){
 			.attr("x", function(d){
 				var x;
 				if(d.sender=="govt"){ 
-					x = width/2;
+					x = widthTimeline/2;
 				} else {
-					x = (width/2) - xAxisScale(	d.count);
+					x = (widthTimeline/2) - xAxisScale(	d.count);
 				}
 				return x;
 			})
@@ -182,31 +186,31 @@ var visualize = function(records){
 
 	svgTimeline.append("g")
 		.attr("class", "x axis")
-		.attr("transform", "translate(" + (width/2) + "," + (height) + ")")
+		.attr("transform", "translate(" + (widthTimeline/2) + "," + (height) + ")")
 		.call( xAxisRight );
 
 	svgTimeline.append("g")
 		.attr("class", "x axis left")
-		.attr("transform", "translate(" + (width/2) + "," + (height) + ")")
+		.attr("transform", "translate(" + (widthTimeline/2) + "," + (height) + ")")
 		.call( xAxisLeft );
 
 	svgTimeline.append("g")
 		.attr("class", "y axis")
-		.attr("transform", "translate(" + width/2 + ",0)")
+		.attr("transform", "translate(" + widthTimeline/2 + ",0)")
 		.call( yAxis);
 
 	var textLabels = [
 		{
 			"lab": "Protests",
 			"color": "black",
-			"x": width/4,
+			"x": widthTimeline/4,
 			"y": 0,
 			"anchor": "middle"
 		},
 		{
 			"lab": "Repression",
 			"color": "black",
-			"x": 3*width/4,
+			"x": 3*widthTimeline/4,
 			"y": 0,
 			"anchor": "middle"
 		}];
@@ -234,7 +238,7 @@ var visualize = function(records){
 		.enter()
 		.append("text")
 		.attr("class", "dateLabel")
-		.attr("x", width/2+10)
+		.attr("x", widthTimeline/2+10)
 		.attr("y", function(d){ return yAxisScale(d.date); })
 		.attr("fill", "black")
 		.attr("text-anchor", function(d){ return d.anchor })
@@ -261,4 +265,34 @@ var visualize = function(records){
 			.attr("height", h*s);		
 		datelabs.attr("y", function(d){ return yAxisScale(d.date); })
 	}
+
+	// begin map stuff here 
+	var svgMap = d3.select("body").append("svg")
+		.attr("width", widthMap)
+		.attr("height", height)
+		.attr("id", "map")
+		.attr("transform", "translate("+margin.top+","+(margin.left+widthTimeline)+")");
+
+	var projection = d3.geo.mercator()
+    .scale(2000)
+    .center([0, 30.05])
+    .rotate([-31.226, 0])
+    .translate([widthTimeline, 150]);	
+
+	plotmap = function(collection){
+	  svgMap.selectAll('path')
+		  .data(collection.features)
+		  .enter().append('path')
+		  .attr('d', d3.geo.path().projection(projection))
+		  .style('fill', '#383838')
+		  .style('stroke', 'black')
+		  .style('stroke-width', 1);
+	};
+
+	d3.json("data/EGY_adm0.json", function(error, json){
+		if(error){ return console.warn(error); }
+		collection = json; 
+		plotmap(collection);
+	});
+	
 }
