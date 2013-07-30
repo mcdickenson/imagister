@@ -21,9 +21,19 @@ var hexbin = d3.hexbin()
     .size([width, height])
     .radius(10);
 
+var mapbackground = "black",
+    mapforeground = "#222222",
+    maplinecolor =  "white";
+
 
 var json;
 
+svg.append("rect")
+  .attr("x",0)
+  .attr("y",0)
+  .attr("height",height)
+  .attr("width",width)
+  .attr("fill",mapbackground);
 
 plotmap = function(collection)
 {
@@ -31,8 +41,8 @@ plotmap = function(collection)
   .data(collection.features)
   .enter().append('path')
   .attr('d', d3.geo.path().projection(projection))
-  .style('fill', '#222222')
-  .style('stroke', 'white')
+  .style('fill', mapforeground)
+  .style('stroke', maplinecolor)
   .style('stroke-width', 1);
 };
 
@@ -62,14 +72,6 @@ plothex = function(collection,color,classtype)
     // .style("fill", function(d) { return color(d.length); })
     .style("fill",color)
 };
-
-
-svg.append("rect")
-  .attr("x",0)
-  .attr("y",0)
-  .attr("height",height)
-  .attr("width",width)
-  .attr("fill","black");
 
 d3.json('data/Egypt_Region.json', function(collection) 
 {
@@ -115,4 +117,9 @@ function highlighthexes(date,sender,source,color)
   highlightedhexes.remove();
   newpoints = getpoints(date,sender,source);
   plothex(newpoints,color,"highlighthex");
+}
+
+function legend(colorlist,highlabel,lowlabel,title)
+{
+
 }
