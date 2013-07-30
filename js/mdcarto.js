@@ -61,19 +61,44 @@ function initialize(){
     "xor"
 	];
 
+	function init_slider(that){
+		var that_opts = that.options;
+		$('body').append('<div id="torque-slider"></div>');
+		$("#torque-slider").slider({
+			min: Math.round(that_opts.start),
+			max: Math.floor(that_opts.end),
+			value: Math.round(that_opts.start),
+			step: that._step,
+			slide: function(event, ui){
+				that._current = ui.value;
+				var date = new Date(that._current*1000);
+				var date_arry = date.toString().substr(4).split(' ');
+				that._display.set_time((that._current - that.start) / that._step);
+			}
+		});
+	};
+
+	function on_move(that){
+		$("#torque-slider").slider({value: that._current });
+	}
+
 	var TorqueOptions = {
 		user: user_name,
 		table: table_name,
 		column: column_name,
 		cumulative: false,
+		steps:450,
 		resolution: 3,
-		fps: 12,
+		fps: 20,
 		fitbounds: false,
 		clock: true,
 		blendmode: blend_modes[1],
 		trails: true,
 		point_type:'circle',
-		cellsize:3
+		cellsize:3,
+		// autoplay: true,
+		scrub: init_slider,
+		scrub_move: on_move
 	}
 
 	var torque = null;
@@ -81,6 +106,22 @@ function initialize(){
 		Torque.app = new env.app.Instance();
 		torque = new Torque.app.addLayer(map, TorqueOptions);
 		Torque.env = env;
+
+		var pause = $('<a></a>');
+		$(pause).attr('id', 'torque-pause')
+		$(pause).addClass("playing");
+		$('body').append(pause);
+		$(pause).click(function(){
+			if($(this).hasClass("paused")){
+				torque.pause();
+				$(this).removeClass("paused");
+				$(this).addClass("playing");
+			} else {
+				$(this).removeClass("playing");
+				$(this).addClass("paused");
+				torque.pause();
+			}
+		});
 	});
 
 }
