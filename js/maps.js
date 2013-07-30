@@ -7,9 +7,9 @@ var svg = d3.select("body").append("svg")
     .attr("height", height);
 
 var projection = d3.geo.mercator()
-    .scale(2000)
-    .center([0, 28.5])
-    .rotate([-31.25, 0])
+    .scale(3000)
+    .center([0, 27])
+    .rotate([-31, 0])
     .translate([width / 2, height / 2]);
 
 
@@ -25,6 +25,7 @@ var hexbin = d3.hexbin()
     .radius(10);
 
 var points = new Array();
+var highlightpoints = new Array();
 
 // var randomX = d3.random.normal(31, 5),
 //     randomY = d3.random.normal(28, 5),
@@ -36,7 +37,7 @@ plotmap = function(collection)
   .data(collection.features)
   .enter().append('path')
   .attr('d', d3.geo.path().projection(projection))
-  .style('fill', '#66CD00')
+  .style('fill', '#222222')
   .style('stroke', 'white')
   .style('stroke-width', 1);
 };
@@ -53,7 +54,7 @@ plotcircles = function(collection)
   .attr("r", 5);
 };
 
-plothex = function(collection)
+plothex = function(collection,color)
 {
   // points = [collection.Latitude,collection.Longitude]
   // var points = [[collection.Latitude, collection.Longitude]];
@@ -67,29 +68,54 @@ plothex = function(collection)
     .attr("class", "hexagon")
     .attr("d", hexbin.hexagon())
     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-    .style("fill", function(d) { return color(d.length); })
+    // .style("fill", function(d) { return color(d.length); })
+    .style("fill",color)
 };
 
 
-d3.json('data/EGY_adm0.json', function(collection) 
+svg.append("rect")
+  .attr("x",0)
+  .attr("y",0)
+  .attr("height",height)
+  .attr("width",width)
+  .attr("fill","black");
+
+d3.json('data/Egypt_Region.json', function(collection) 
 {
   plotmap(collection);
 });
 
 d3.json('data/testfile.json', function(collection)
 {
-  // points = projection([collection.Latitude,collection.Longitude]);
   for(i in collection)
   {
-    points[i] = projection([collection[i].Longitude,collection[i].Latitude]);
+    points[i] = projection([collection[i].Longitude,collection[i].Latitude,collection[i].Date,collection[i].Sender,collection[i].Action,collection[i].Source]);
   }
   // plotcircles(points);
+    plothex(points,"gray");
+    dailyhex("2012-06-02","govt","repress","icews");
 });
 
 function drawcircles()
 {
-  plotcircles(points);
+  plothex(points,"gray");
 }
+
+
+function dailyhex(date,sender,action,source)
+{
+  for(i in points)
+  {
+    if(points[2]==date && points[3]==sender && points[4]==action && points[5]==source)
+    {
+      highlightpoints.push(points[0],points[1]);
+    }
+  }
+  plothex(highlightpoints,"red");
+}
+
+
+// dailyhex("2012-06-02","govt","repress","icews");
 
 // );
 
