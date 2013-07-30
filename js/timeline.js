@@ -6,14 +6,16 @@ var margin = {
 	left: 30,
 	right: 30
 };
-var height = 1200 - margin.top - margin.bottom;
+var height = 600 - margin.top - margin.bottom;
 var width = 400 - margin.left - margin.right; 
 var increment = 5; 
-var green = "#7FC97F",
-	icewsColor=green;
-var purple = "#BEAED4",
-	gdeltColor=purple;
-var red = "#FDC086";
+var orange = "#FECC5C",
+	blue = "#41B6C4";
+	green = "#7FC97F",
+	red = "#FDC086",
+	purple = "#BEAED4",
+	icewsColor=blue,
+	gdeltColor=orange;
 var formatTime = d3.time.format("%e %B");
 
 var records; 
