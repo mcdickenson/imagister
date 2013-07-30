@@ -279,6 +279,14 @@ var visualize = function(records){
     .rotate([-31.226, 0])
     .translate([widthTimeline, 150]);	
 
+	// var longitudeScale = d3.scale.linear()
+	// 	.domain(d3.extent(records, function(d){ return d.Longitude; }))
+	// 	.range([margin.left, widthMap]);
+
+	// var latitudeScale = d3.time.scale()
+	// 	.domain([0, d3.max(records, function(d){ return d.Latitude; })])
+	// 	.range([margin.top, height]);
+
 	plotmap = function(collection){
 	  svgMap.selectAll('path')
 		  .data(collection.features)
@@ -289,10 +297,23 @@ var visualize = function(records){
 		  .style('stroke-width', 1);
 	};
 
+	plotcircles = function(data){
+		svgMap.selectAll("circle")
+			.data(data)
+			.enter()
+			.append("circle")
+			.attr("cx", function(d){ return longitudeScale( d.Latitude ); })
+			.attr("cy", function(d){ return latitudeScale( d.Longitude ); })
+			.attr("fill", "green")
+			.attr("r", 5);
+	}
+
 	d3.json("data/EGY_adm0.json", function(error, json){
 		if(error){ return console.warn(error); }
 		collection = json; 
 		plotmap(collection);
+		plotcircles(records.slice(0,99));
+		console.log(records.slice(0,99));
 	});
 	
 }
