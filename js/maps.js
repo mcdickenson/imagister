@@ -12,9 +12,23 @@ var projection = d3.geo.mercator()
     .rotate([-31, 0])
     .translate([width / 2, height / 2]);
 
-var colorscale = d3.scale.linear()
-    .domain([0,3,6,9,12])
-    .range(["#C6DBEF","#9ECAE1","#6BAED6","#2182BD","#08519C"])
+var scalemin = 0;
+var scalemax = 40;
+var scaleavg = (scalemin+scalemax)/2;
+
+var bluescale = d3.scale.linear()
+    .domain([scalemin,scaleavg,scalemax])
+    .range(["#C7E9B4","#41B6C4","#253494"])
+    .interpolate(d3.interpolateLab);
+
+var orangescale = d3.scale.linear()
+    .domain([scalemin,scaleavg,scalemax])
+    .range(["#FED976","#FD8D3C","#BD0026"])
+    .interpolate(d3.interpolateLab);
+
+var defaultscale = d3.scale.linear()
+    .domain([scalemin,scalemax])
+    .range(["#DADAEB","#54278F"])
     .interpolate(d3.interpolateLab);
 
 var hexbin = d3.hexbin()
@@ -84,6 +98,7 @@ d3.json('data/testfile.json', function(collection)
   json = collection;
   points = getpoints();
   plothex(points,"#444444","basehex");
+  legend();
 });
 
 
@@ -109,9 +124,13 @@ function getpoints(date,sender,source)
 }
 
 
-function highlighthexes(date,sender,source,color)
+function highlighthexes(date,sender,source)
 {
-  if(typeof(color)==='undefined') color = function(d) { return colorscale(d.length); };
+  color = function(d) { return defaultscale(d.length);};
+  if(source=="icews")
+    color = function(d) { return bluescale(d.length);};
+  if(source=="gdelt")
+    color = function(d) { return orangescale(d.length);};
 
   var highlightedhexes = svg.selectAll("#highlighthex");
   highlightedhexes.remove();
@@ -122,12 +141,12 @@ function highlighthexes(date,sender,source,color)
 function legend()
 {
   rectpos = [ [height-30,0],
-              [height-50,3],
-              [height-70,6],
-              [height-90,9],
-              [height-110,12] ];
+              [height-50,10],
+              [height-70,20],
+              [height-90,30],
+              [height-110,40] ];
   
-  svg.selectAll("legend")
+  svg.selectAll("legend_orange")
   .data(rectpos)
   .enter()
   .append("rect")
@@ -135,6 +154,22 @@ function legend()
   .attr("y",function(d){return(d[0])})
   .attr("height",20)
   .attr("width",20)
-  .attr("fill",function(d){return(colorscale(d[1]))});
+  .attr("fill",function(d){return(orangescale(d[1]))});
+
+  svg.selectAll("legend_blue")
+  .data(rectpos)
+  .enter()
+  .append("rect")
+  .attr("x",30)
+  .attr("y",function(d){return(d[0])})
+  .attr("height",20)
+  .attr("width",20)
+  .attr("fill",function(d){return(bluescale(d[1]))});
+
+  svg.append("text")
+  .text("40")
+  .attr("x",32)
+  .attr("y",height-95)
+  .attr("fill","white")
 }
 
