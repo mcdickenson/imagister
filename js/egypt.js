@@ -8,7 +8,7 @@ var margin = {
 };
 var height = 600 - margin.top - margin.bottom;
 var widthTimeline = 400 - margin.left,
-	widthMap = 600 - margin.right,
+	widthMap = 600 - margin.right - margin.left,
 	widthTotal = widthTimeline + widthMap;
 var increment = 5; 
 
@@ -279,14 +279,6 @@ var visualize = function(records){
     .rotate([-31.226, 0])
     .translate([widthTimeline, 150]);	
 
-	// var longitudeScale = d3.scale.linear()
-	// 	.domain(d3.extent(records, function(d){ return d.Longitude; }))
-	// 	.range([margin.left, widthMap]);
-
-	// var latitudeScale = d3.time.scale()
-	// 	.domain([0, d3.max(records, function(d){ return d.Latitude; })])
-	// 	.range([margin.top, height]);
-
 	plotmap = function(collection){
 	  svgMap.selectAll('path')
 		  .data(collection.features)
@@ -302,18 +294,27 @@ var visualize = function(records){
 			.data(data)
 			.enter()
 			.append("circle")
-			.attr("cx", function(d){ return longitudeScale( d.Latitude ); })
-			.attr("cy", function(d){ return latitudeScale( d.Longitude ); })
-			.attr("fill", "green")
-			.attr("r", 5);
+			.attr("cx", function(d){ 
+				var p = projection([d.Longitude, d.Latitude]);
+				return p[0]; 
+			})
+			.attr("cy", function(d){ 
+				var p = projection([d.Longitude, d.Latitude]);
+				return p[1]; 
+			})
+			.attr("fill", red)
+			.attr("r", 3);
 	}
 
-	d3.json("data/EGY_adm0.json", function(error, json){
+	// var shapefile = "data/EGY_adm0_small.json";
+	var shapefile = "data/Egypt_Region.json";
+	d3.json(shapefile, function(error, json){
 		if(error){ return console.warn(error); }
 		collection = json; 
 		plotmap(collection);
-		plotcircles(records.slice(0,99));
-		console.log(records.slice(0,99));
+		plotcircles(records);
 	});
 	
 }
+
+// todo: make sure map doesn't overlap timeline x-axis
