@@ -181,7 +181,10 @@ var visualize = function(records){
 			tooltip.html(formatTime(d.date) + "<br/>" + d.count + " events (" + d.source.toUpperCase() + ")")
 				.style("left", (d3.event.pageX ) +"px")
 				.style("top", (d3.event.pageY ) +"px");
-			plotcircles(d.sender, d.source);
+			var month = ""+(d.date.getMonth()+1);
+			if(month.length==1){ month = "0"+month; }
+			var tmpdate = d.date.getFullYear()+"-"+month+"-"+d.date.getDate();
+			plotcircles(tmpdate, d.sender, d.source);
 		})
 		.on("mouseout", function(d){
 			tooltip.transition()
@@ -309,18 +312,14 @@ var visualize = function(records){
 		if(error){ return console.warn(error); }
 		collection = json; 
 		plotmap(collection);
-		plotcircles("none", "none");
-		// plotcircles(records);
-		// console.log(records);
 	});
 
-	plotcircles = function(sender, source){
+	plotcircles = function(date, sender, source){
 		svgMap.selectAll("circle").remove();
 		var mapCircles = svgMap.selectAll("circle")
 			.data(records)
 			.enter()
 			.append("circle")
-			// .attr("id", function(d){ return d.Source+"."+d.SenderActor+"."+d.Date; })
 			.attr("id", function(d){ return d.Source+"."+d.SenderActor; })
 			.attr("cx", function(d){ 
 				var p = projection([d.Longitude, d.Latitude]);
@@ -332,16 +331,14 @@ var visualize = function(records){
 			})
 			.attr("fill", function(d){
 				var col = "none";
-				if(d.Source==source && d.SenderActor==sender){
+				if(d.Date===date && d.Source===source && d.SenderActor===sender){
 					col = colorize(d);
 				}
 				return col; 
 			})
 			.attr("r", 3);
-			console.log(sender+"."+source);
 	}
 
-	
 }
 
 // todo: make sure map doesn't overlap timeline x-axis
