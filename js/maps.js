@@ -119,7 +119,22 @@ function highlighthexes(date,sender,source,color)
   plothex(newpoints,color,"highlighthex");
 }
 
-function legend(colorlist,highlabel,lowlabel,title)
+function legend()
 {
-
+  rectpos = [ [height-30,0],
+              [height-50,3],
+              [height-70,6],
+              [height-90,9],
+              [height-110,12] ];
+  
+  svg.selectAll("legend")
+  .data(rectpos)
+  .enter()
+  .append("rect")
+  .attr("x",10)
+  .attr("y",function(d){return(d[0])})
+  .attr("height",20)
+  .attr("width",20)
+  .attr("fill",function(d){return(colorscale(d[1]))});
 }
+
