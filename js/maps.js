@@ -82,9 +82,6 @@ d3.json('data/testfile.json', function(collection)
   json = collection;
   points = getpoints();
   plothex(points,"#444444","basehex");
-  newpoints = getpoints("2013-01-24");
-  plothex(newpoints,function(d) { return colorscale(d.length); },"highlighthex");
-    // dailyhex("2012-06-02","govt","icews");
 });
 
 
@@ -110,8 +107,12 @@ function getpoints(date,sender,source)
 }
 
 
-function removepoints()
+function highlighthexes(date,sender,source,color)
 {
+  if(typeof(color)==='undefined') color = function(d) { return colorscale(d.length); };
+
   var highlightedhexes = svg.selectAll("#highlighthex");
   highlightedhexes.remove();
+  newpoints = getpoints(date,sender,source);
+  plothex(newpoints,color,"highlighthex");
 }
