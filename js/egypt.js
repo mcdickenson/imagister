@@ -133,6 +133,16 @@ var visualize = function(records){
 
 	var h = (height/daySeq.length)*0.5;
 
+	var colorize = function(d){
+		var col;
+		if(d.source=="gdelt" || d.Source=="gdelt"){
+			col=gdeltColor;
+		} else {
+			col=icewsColor;
+		}
+		return col;
+	}
+
 	var rects = svgTimeline.selectAll(".series")
 			.data(series)
 		.enter().append("g")
@@ -161,15 +171,7 @@ var visualize = function(records){
 			})
 			.attr("height", h)
 			.attr("width", function(d){ return xAxisScale(d.count);})
-			.attr("fill", function(d){
-				var col;
-				if(d.source=="gdelt"){
-					col=gdeltColor;
-				} else {
-					col=icewsColor;
-				}
-				return col;
-			})
+			.attr("fill", function(d){ return colorize(d); } )
 		.on("mouseover", function(d){
 			tooltip.transition()
 				.duration(200)
@@ -302,7 +304,7 @@ var visualize = function(records){
 				var p = projection([d.Longitude, d.Latitude]);
 				return p[1]; 
 			})
-			.attr("fill", red)
+			.attr("fill", function(d){ return colorize(d); })
 			.attr("r", 3);
 	}
 
