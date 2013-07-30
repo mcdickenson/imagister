@@ -275,6 +275,15 @@ var visualize = function(records){
 		.attr("id", "map")
 		.attr("transform", "translate("+margin.top+","+(margin.left+widthTimeline)+")");
 
+	var borderPath = svgMap.append("rect")
+		.attr("x", 0)
+		.attr("y", 0)
+		.attr("width", widthMap)
+		.attr("height", height)
+		.attr("stroke", "black")
+		.style("fill", "none")
+		.style("stroke-width", 1);
+
 	var projection = d3.geo.mercator()
     .scale(2000)
     .center([0, 30.05])
