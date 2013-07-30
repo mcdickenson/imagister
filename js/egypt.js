@@ -114,14 +114,14 @@ var visualize = function(records){
 		.translate([0, 0])
 		.on("zoom", zoomed);
 
-	var svgContainer = d3.select("body").append("svg")
+	var svgTimeline = d3.select("body").append("svg")
 			.attr("width", width + margin.left + margin.right)
 			.attr("height", height + margin.top + margin.bottom)
 		.append("g")
 			.attr("transform", "translate("+margin.left+","+margin.top+")")
 			.call(zoom);
 
-	svgContainer.append("svg:rect")
+	svgTimeline.append("svg:rect")
 		.attr("width", width)
 		.attr("height", height)
 		.attr("class", "plot")
@@ -129,7 +129,7 @@ var visualize = function(records){
 
 	var h = (height/daySeq.length)*0.5;
 
-	var rects = svgContainer.selectAll(".series")
+	var rects = svgTimeline.selectAll(".series")
 			.data(series)
 		.enter().append("g")
 			.attr("class", "series")
@@ -180,17 +180,17 @@ var visualize = function(records){
 				.style("opacity", 0)
 		});
 
-	svgContainer.append("g")
+	svgTimeline.append("g")
 		.attr("class", "x axis")
 		.attr("transform", "translate(" + (width/2) + "," + (height) + ")")
 		.call( xAxisRight );
 
-	svgContainer.append("g")
+	svgTimeline.append("g")
 		.attr("class", "x axis left")
 		.attr("transform", "translate(" + (width/2) + "," + (height) + ")")
 		.call( xAxisLeft );
 
-	svgContainer.append("g")
+	svgTimeline.append("g")
 		.attr("class", "y axis")
 		.attr("transform", "translate(" + width/2 + ",0)")
 		.call( yAxis);
@@ -211,7 +211,7 @@ var visualize = function(records){
 			"anchor": "middle"
 		}];
 
-	var text = svgContainer.selectAll(".textLabel")
+	var text = svgTimeline.selectAll(".textLabel")
 		.data(textLabels)
 		.enter()
 		.append("text")
@@ -229,7 +229,7 @@ var visualize = function(records){
 			"anchor": "left"
 		}];
 
-	var datelabs = svgContainer.selectAll(".dateLabel")
+	var datelabs = svgTimeline.selectAll(".dateLabel")
 		.data(dateLabels)
 		.enter()
 		.append("text")
@@ -250,9 +250,9 @@ var visualize = function(records){
 		t[1] = Math.min(t[1], 0);
 		t[1] = Math.max(t[1], height-(yAxisScale(maxDate)*s) );
 		zoom.translate(t);
-		svgContainer.select(".y.axis").call(yAxis);
-		svgContainer.select(".x.axis").call(xAxisRight);
-		svgContainer.select(".x.axis.left").call(xAxisLeft);
+		svgTimeline.select(".y.axis").call(yAxis);
+		svgTimeline.select(".x.axis").call(xAxisRight);
+		svgTimeline.select(".x.axis.left").call(xAxisLeft);
 		rects.attr("y", function(d){ 
 				var dy = yAxisScale(d.date);
 				if(d.source=="icews"){ dy = dy + (h*s); }
