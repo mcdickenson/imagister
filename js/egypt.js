@@ -137,8 +137,10 @@ var visualize = function(records){
 		var col;
 		if(d.source=="gdelt" || d.Source=="gdelt"){
 			col=gdeltColor;
-		} else {
+		} else if (d.source=="icews" || d.Source=="icews"){
 			col=icewsColor;
+		} else{
+			col="none";
 		}
 		return col;
 	}
@@ -178,7 +180,8 @@ var visualize = function(records){
 				.style("opacity", .9)
 			tooltip.html(formatTime(d.date) + "<br/>" + d.count + " events (" + d.source.toUpperCase() + ")")
 				.style("left", (d3.event.pageX ) +"px")
-				.style("top", (d3.event.pageY ) +"px") 
+				.style("top", (d3.event.pageY ) +"px");
+			plotcircles(d.sender, d.source);
 		})
 		.on("mouseout", function(d){
 			tooltip.transition()
@@ -300,11 +303,25 @@ var visualize = function(records){
 		  .style('stroke-width', 1);
 	};
 
-	plotcircles = function(data){
-		svgMap.selectAll("circle")
-			.data(data)
+	// var shapefile = "data/EGY_adm0_small.json";
+	var shapefile = "data/Egypt_Region.json";
+	d3.json(shapefile, function(error, json){
+		if(error){ return console.warn(error); }
+		collection = json; 
+		plotmap(collection);
+		plotcircles("none", "none");
+		// plotcircles(records);
+		// console.log(records);
+	});
+
+	plotcircles = function(sender, source){
+		svgMap.selectAll("circle").remove();
+		var mapCircles = svgMap.selectAll("circle")
+			.data(records)
 			.enter()
 			.append("circle")
+			// .attr("id", function(d){ return d.Source+"."+d.SenderActor+"."+d.Date; })
+			.attr("id", function(d){ return d.Source+"."+d.SenderActor; })
 			.attr("cx", function(d){ 
 				var p = projection([d.Longitude, d.Latitude]);
 				return p[0]; 
@@ -313,18 +330,17 @@ var visualize = function(records){
 				var p = projection([d.Longitude, d.Latitude]);
 				return p[1]; 
 			})
-			.attr("fill", function(d){ return colorize(d); })
+			.attr("fill", function(d){
+				var col = "none";
+				if(d.Source==source && d.SenderActor==sender){
+					col = colorize(d);
+				}
+				return col; 
+			})
 			.attr("r", 3);
+			console.log(sender+"."+source);
 	}
 
-	// var shapefile = "data/EGY_adm0_small.json";
-	var shapefile = "data/Egypt_Region.json";
-	d3.json(shapefile, function(error, json){
-		if(error){ return console.warn(error); }
-		collection = json; 
-		plotmap(collection);
-		plotcircles(records);
-	});
 	
 }
 
