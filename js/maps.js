@@ -12,24 +12,18 @@ var projection = d3.geo.mercator()
     .rotate([-31, 0])
     .translate([width / 2, height / 2]);
 
-
-var color = d3.scale.linear()
-    .domain([0,5,10,15,20,25,30,35,500])
-    .range(["#ffffd9","#edf8b1","#c7e9b4","#7fcdbb","#41b6c4","#1d91c0","#225ea8","#253494","#081d58"])
+var colorscale = d3.scale.linear()
+    .domain([0,3,6,9,12])
+    .range(["#C6DBEF","#9ECAE1","#6BAED6","#2182BD","#08519C"])
     .interpolate(d3.interpolateLab);
-
-
 
 var hexbin = d3.hexbin()
     .size([width, height])
     .radius(10);
 
-var points = new Array();
-var highlightpoints = new Array();
 
-// var randomX = d3.random.normal(31, 5),
-//     randomY = d3.random.normal(28, 5),
-//     points = d3.range(2000).map(function() { return projection([randomX(), randomY()]); });
+var json;
+
 
 plotmap = function(collection)
 {
@@ -50,15 +44,11 @@ plotcircles = function(collection)
   .append("circle")
   .attr("cx", function(d) {return d[0];})
   .attr("cy", function(d) {return d[1];})
-  // .attr("transform", function(d) { return "translate(" + d[0] + "," + d[1] + ")"; })
   .attr("r", 5);
 };
 
-plothex = function(collection,color)
+plothex = function(collection,color,classtype)
 {
-  // points = [collection.Latitude,collection.Longitude]
-  // var points = [[collection.Latitude, collection.Longitude]];
-  // points = [[collection.Longitude, collection.Latitude]];
   points = collection;
   svg.append("g")
     .attr("clip-path", "url(#clip)")
@@ -66,6 +56,7 @@ plothex = function(collection,color)
     .data(hexbin(points))
   .enter().append("path")
     .attr("class", "hexagon")
+    .attr("id", classtype)
     .attr("d", hexbin.hexagon())
     .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
     // .style("fill", function(d) { return color(d.length); })
@@ -85,49 +76,42 @@ d3.json('data/Egypt_Region.json', function(collection)
   plotmap(collection);
 });
 
+
 d3.json('data/testfile.json', function(collection)
 {
-  for(i in collection)
-  {
-    points[i] = projection([collection[i].Longitude,collection[i].Latitude,collection[i].Date,collection[i].Sender,collection[i].Action,collection[i].Source]);
-  }
-  // plotcircles(points);
-    plothex(points,"gray");
-    dailyhex("2012-06-02","govt","repress","icews");
+  json = collection;
+  points = getpoints();
+  plothex(points,"#444444","basehex");
+  newpoints = getpoints("2013-01-24");
+  plothex(newpoints,function(d) { return colorscale(d.length); },"highlighthex");
+    // dailyhex("2012-06-02","govt","icews");
 });
 
-function drawcircles()
-{
-  plothex(points,"gray");
-}
 
-
-function dailyhex(date,sender,action,source)
+function getpoints(date,sender,source)
 {
-  for(i in points)
+
+  // THIS FUNCTION TAKES IN date, sender, source AND RETURNS PROJECTED [Long,Lat] 
+  // THIS FUNCTION DEFAULTS TO 'all' IF ANY ARGUMENTS ARE NOT SUPPLIED
+
+  if(typeof(date)==='undefined') date = "all";
+  if(typeof(sender)==='undefined') sender = "all";
+  if(typeof(source)==='undefined') source = "all";
+
+  points = new Array();
+  for(i in json)
   {
-    if(points[2]==date && points[3]==sender && points[4]==action && points[5]==source)
+    if( (json[i].Date==date || date=="all") && (json[i].SenderActor==sender || sender=="all") && (json[i].Source==source || source=="all"))
     {
-      highlightpoints.push(points[0],points[1]);
+      points[i] = projection([json[i].Longitude,json[i].Latitude])
     }
   }
-  plothex(highlightpoints,"red");
+  return(points)
 }
 
 
-// dailyhex("2012-06-02","govt","repress","icews");
-
-// );
-
-
-// var records; 
-// d3.json("testfile.json", function(error, json){
-//   if(error){ return console.warn(error); }
-//   records = json; 
-//   visualize(records);
-// });
-
-
-// var randomX = d3.random.normal(width / 2, 80),
-//     randomY = d3.random.normal(height / 2, 80),
-//     points = d3.range(100).map(function() { return [randomX(), randomY()]; });
+function removepoints()
+{
+  var highlightedhexes = svg.selectAll("#highlighthex");
+  highlightedhexes.remove();
+}
