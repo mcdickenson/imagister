@@ -27,8 +27,8 @@ var orangescale = d3.scale.linear()
     .interpolate(d3.interpolateLab);
 
 var defaultscale = d3.scale.linear()
-    .domain([scalemin,scalemax])
-    .range(["#DADAEB","#54278F"])
+    .domain([scalemin,scaleavg,scalemax])
+    .range(["#FCC5C0","#F768A1","#7A0177"])
     .interpolate(d3.interpolateLab);
 
 var hexbin = d3.hexbin()
@@ -167,9 +167,15 @@ function legend()
   .attr("fill",function(d){return(bluescale(d[1]))});
 
   svg.append("text")
-  .text("40")
+  .text(scalemax)
   .attr("x",32)
   .attr("y",height-95)
-  .attr("fill","white")
+  .attr("fill",bluescale(scalemin))
+
+  svg.append("text")
+  .text("01")
+  .attr("x",32)
+  .attr("y",height-15)
+  .attr("fill",bluescale(scalemax))
 }
 
