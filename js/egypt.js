@@ -7,16 +7,13 @@ var margin = {
 	right: 30
 };
 var height = 600 - margin.top - margin.bottom;
-var widthTimeline = 400 - margin.left,
+var widthTimeline = 400 - margin.left - margin.right,
 	widthMap = 600 - margin.right - margin.left,
-	widthTotal = widthTimeline + widthMap;
+	widthTotal = widthTimeline + widthMap + margin.left + margin.right;
 var increment = 5; 
 
 var orange = "#FECC5C",
 	blue = "#41B6C4";
-	green = "#7FC97F",
-	red = "#FDC086",
-	purple = "#BEAED4",
 	icewsColor=blue,
 	gdeltColor=orange;
 var formatTime = d3.time.format("%e %B");
@@ -118,7 +115,7 @@ var visualize = function(records){
 		.on("zoom", zoomed);
 
 	var svgTimeline = d3.select("body").append("svg")
-			.attr("width", widthTimeline + margin.left)
+			.attr("width", widthTimeline+margin.left+margin.right)
 			.attr("height", height + margin.top + margin.bottom)
 			.attr("id", "timeline")
 		.append("g")
