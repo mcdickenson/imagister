@@ -189,6 +189,38 @@ var visualize = function(records){
 				.style("opacity", 0)
 		});
 
+	var dateLabels = [
+		{
+			"date": new Date("2012-07-04"),
+			"text": "July 4",
+			"anchor": "left"
+		}];
+
+	var datelabs = svgTimeline.selectAll(".dateLabel")
+		.data(dateLabels)
+		.enter()
+		.append("text")
+		.attr("class", "dateLabel")
+		.attr("x", widthTimeline/2+10)
+		.attr("y", function(d){ return yAxisScale(d.date); })
+		.attr("fill", "black")
+		.attr("text-anchor", function(d){ return d.anchor })
+		.text(function(d) { return d.text; });
+
+	svgTimeline.append("svg:rect")
+		.attr("width", widthTimeline)
+		.attr("height", 60)
+		.attr("y", -50)
+		.attr("class", "filler")
+		.attr("fill", "#FFFFFF");
+
+	svgTimeline.append("svg:rect")
+		.attr("width", widthTimeline)
+		.attr("height", 20)
+		.attr("y", height)
+		.attr("class", "filler")
+		.attr("fill", "#FFFFFF");
+
 	svgTimeline.append("g")
 		.attr("class", "x axis")
 		.attr("transform", "translate(" + (widthTimeline/2) + "," + (height) + ")")
@@ -230,24 +262,6 @@ var visualize = function(records){
 		.attr("fill", function(d) { return d.color; })
 		.attr("text-anchor", function(d) { return d.anchor; })
 		.text( function(d) { return d.lab; });
-
-	var dateLabels = [
-		{
-			"date": new Date("2012-07-04"),
-			"text": "July 4",
-			"anchor": "left"
-		}];
-
-	var datelabs = svgTimeline.selectAll(".dateLabel")
-		.data(dateLabels)
-		.enter()
-		.append("text")
-		.attr("class", "dateLabel")
-		.attr("x", widthTimeline/2+10)
-		.attr("y", function(d){ return yAxisScale(d.date); })
-		.attr("fill", "black")
-		.attr("text-anchor", function(d){ return d.anchor })
-		.text(function(d) { return d.text; });
 
 	var tooltip = d3.select("body").append("div")
 		.attr("class", "tooltip")
