@@ -6,6 +6,14 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
+// SYRIA PROJECTION
+// var projection = d3.geo.mercator()
+//     .scale(5500)
+//     .center([0, 34.9])
+//     .rotate([-39, 0])
+//     .translate([width / 2, height / 2]);
+
+//EGYPT PROJECTION
 var projection = d3.geo.mercator()
     .scale(3000)
     .center([0, 27])
@@ -87,21 +95,6 @@ plothex = function(collection,color,classtype)
     .style("fill",color)
 };
 
-d3.json('data/Egypt_Region.json', function(collection) 
-{
-  plotmap(collection);
-});
-
-
-d3.json('data/testfile.json', function(collection)
-{
-  json = collection;
-  points = getpoints();
-  plothex(points,"#444444","basehex");
-  legend();
-});
-
-
 function getpoints(date,sender,source)
 {
 
@@ -179,3 +172,16 @@ function legend()
   .attr("fill",bluescale(scalemax))
 }
 
+d3.json('data/Egypt_Region.json', function(collection) 
+{
+  plotmap(collection);
+});
+
+
+d3.json('data/icews_egypt.json', function(collection)
+{
+  json = collection;
+  points = getpoints();
+  plothex(points,"#444444","basehex");
+  legend();
+});

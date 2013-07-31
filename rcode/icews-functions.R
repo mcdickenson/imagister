@@ -45,7 +45,7 @@ subsetICEWS <- function(sender,action,receiver,data,country,startdate=NULL)
   newdata <- newdata[complete.cases(newdata),]
   newdata <- newdata[as.Date(newdata$Date)>=as.Date(startdate),]
   newdata$Country <- country
-  newdata$Source <- "ICEWS"
+  newdata$Source <- "icews"
   return(newdata)
 }
 
