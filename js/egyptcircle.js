@@ -111,7 +111,7 @@ var visualize = function(records){
 
 	var zoom = d3.behavior.zoom()
 		.y(yAxisScale)
-		.scaleExtent([1, 10])
+		.scaleExtent([1, 15])
 		.translate([0, 0])
 		.on("zoom", zoomed);
 

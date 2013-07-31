@@ -111,7 +111,7 @@ var visualize = function(records){
 
 	var zoom = d3.behavior.zoom()
 		.y(yAxisScale)
-		.scaleExtent([1, 10])
+		.scaleExtent([1, 15])
 		.translate([0, 0])
 		.on("zoom", zoomed);
 
@@ -362,8 +362,8 @@ var visualize = function(records){
 	};
 
 	var hexbin = d3.hexbin()
-    .size([5, 5])
-    .radius(10);
+    .size([3, 3])
+    .radius(8);
 
 	// var shapefile = "data/EGY_adm0_small.json";
 	var shapefile = "data/Egypt_Region.json";
@@ -410,16 +410,13 @@ var visualize = function(records){
 	    .attr("id", classtype)
 	    .attr("d", hexbin.hexagon())
 	    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
-	    // .style("fill", function(d) { return color(d.length); })
 	    .style("fill",color)
 	}
 
 	function getpoints(date,sender,source)
 	{
-
-	  // THIS FUNCTION TAKES IN date, sender, source AND RETURNS PROJECTED [Long,Lat] 
-	  // THIS FUNCTION DEFAULTS TO 'all' IF ANY ARGUMENTS ARE NOT SUPPLIED
-
+	  // input: date, sender, source AND RETURNS PROJECTED [Long,Lat] 
+	  // default: TO 'all' IF ANY ARGUMENTS ARE NOT SUPPLIED
 	  if(typeof(date)==='undefined') date = "all";
 	  if(typeof(sender)==='undefined') sender = "all";
 	  if(typeof(source)==='undefined') source = "all";
