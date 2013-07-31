@@ -6,14 +6,21 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-// SYRIA PROJECTION
+/*<!--SYRIA PROJECTION-->
+var projection = d3.geo.mercator()
+    .scale(5500)
+    .center([0, 34.9])
+    .rotate([-39, 0])
+    .translate([width / 2, height / 2]);*/
+
+// <!--TURKEY PROJECTION-->
 // var projection = d3.geo.mercator()
-//     .scale(5500)
-//     .center([0, 34.9])
-//     .rotate([-39, 0])
+//     .scale(2500)
+//     .center([0, 39])
+//     .rotate([-35.2, 0])
 //     .translate([width / 2, height / 2]);
 
-//EGYPT PROJECTION
+<!--EGYPT PROJECTION-->
 var projection = d3.geo.mercator()
     .scale(3000)
     .center([0, 27])
@@ -172,11 +179,14 @@ function legend()
   .attr("fill",bluescale(scalemax))
 }
 
-d3.json('data/Egypt_Region.json', function(collection) 
+d3.json('data/shapefiles/region.json', function(collection) 
 {
   plotmap(collection);
 });
 
+// data/icews_turkey.json
+// data/icews_egypt.json
+// data/icews_syria.json
 
 d3.json('data/icews_egypt.json', function(collection)
 {
