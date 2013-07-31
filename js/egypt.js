@@ -310,7 +310,7 @@ var visualize = function(records){
 		var t = d3.event.translate,
 			s = d3.event.scale;
 		t[1] = Math.min(t[1], 0);
-		t[1] = Math.max(t[1], height-(yAxisScale(maxDate)*s) );
+		t[1] = Math.max(t[1], height-(yAxisScale(maxDate)*s)-20*s );
 		zoom.translate(t);
 		svgTimeline.select(".y.axis").call(yAxis);
 		svgTimeline.select(".x.axis").call(xAxisRight);
