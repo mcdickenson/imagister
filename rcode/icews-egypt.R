@@ -1,6 +1,6 @@
 source("icews-functions.R")
 
-icewsEGY <- read.csv("C:/users/ben/dropbox/gdelt-egypt-turkey/EgyptSyriaTurkey-2010forward/Egypt.csv",stringsAsFactors=F)
+icewsEGY <- read.csv("C:/users/ben/dropbox/gdelt-egypt-turkey/EgyptSyriaTurkey.zip Folder/Egypt-all.csv",stringsAsFactors=F)
 
 icewsEGY <- grepActor(c("Government","Military","Police"),"govt",icewsEGY)
 icewsEGY <- grepActor(c("Protestor","Opposition","Dissident","Rebel"),"anti",icewsEGY)
@@ -8,8 +8,8 @@ icewsEGY <- grepActor(c("Protestor","Opposition","Dissident","Rebel"),"anti",ice
 icewsEGY <- grepAction(c("riot","rally","Protest"),"protest",icewsEGY)
 icewsEGY <- grepAction(c("repression","military force","small arms"),"repress",icewsEGY)
 
-newdata <- subsetICEWS("govt","repress","anti",icewsEGY,"Egypt","2012-06-01")
-newdata <- rbind(newdata,subsetICEWS("anti","protest","govt",icewsEGY,"Egypt","2012-06-01"))
+newdata <- subsetICEWS("govt","repress","anti",icewsEGY,"Egypt","2001-01-01")
+newdata <- rbind(newdata,subsetICEWS("anti","protest","govt",icewsEGY,"Egypt","2001-01-01"))
 
 #write.csv(newdata,"../data/icews_egypt.csv",row.names=F)
 icewsJSON(newdata,"../data/icews_egypt.json")
