@@ -181,7 +181,7 @@ var visualize = function(records){
 			var month = ""+(d.date.getMonth()+1);
 			if(month.length==1){ month = "0"+month; }
 			var tmpdate = d.date.getFullYear()+"-"+month+"-"+d.date.getDate();
-			plotcircles(tmpdate, d.sender, d.source);
+			plotcircles(tmpdate, d.sender, d.source, d.count);
 		})
 		.on("mouseout", function(d){
 			tooltip.transition()
@@ -366,7 +366,31 @@ var visualize = function(records){
 		plotmap(collection);
 	});
 
-	plotcircles = function(date, sender, source){
+	var scaleavg = countMax/2;
+
+	var icewsScale = d3.scale.linear()
+		.domain([0, scaleavg, countMax])
+		.range(["#C7E9B4","#41B6C4","#253494"])
+		.interpolate(d3.interpolateLab);
+
+	var gdeltScale = d3.scale.linear()
+		.domain([0, scaleavg, countMax])
+		.range(["#FED976","#FD8D3C","#BD0026"])
+		.interpolate(d3.interpolateLab);
+
+	var colorize2 = function(d, count){
+		var col;
+		if(d.source=="gdelt" || d.Source=="gdelt"){
+			col=gdeltScale(count);
+		} else if (d.source=="icews" || d.Source=="icews"){
+			col=icewsScale(count);
+		} else{
+			col="none";
+		}
+		return col;
+	}
+
+	plotcircles = function(date, sender, source, count){
 		svgMap.selectAll("circle").remove();
 		var mapCircles = svgMap.selectAll("circle")
 			.data(records)
@@ -384,13 +408,11 @@ var visualize = function(records){
 			.attr("fill", function(d){
 				var col = "none";
 				if(d.Date===date && d.Source===source && d.SenderActor===sender){
-					col = colorize(d);
+					col = colorize2(d, count);
 				}
 				return col; 
 			})
-			.attr("r", 3);
+			.attr("r", 4);
 	}
 
 }
-
-// todo: make sure map doesn't overlap timeline x-axis
