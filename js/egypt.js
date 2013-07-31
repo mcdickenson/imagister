@@ -191,21 +191,50 @@ var visualize = function(records){
 
 	var dateLabels = [
 		{
-			"date": new Date("2012-07-04"),
-			"text": "July 4",
+			"date": new Date("2012-06-18"),
+			"text": "Morsi elected",
+			"anchor": "left"
+		},
+		{
+			"date": new Date("2012-12-05"),
+			"text": "March on palace",
+			"anchor": "left"
+		},
+		{
+			"date": new Date("2012-12-15"),
+			"text": "Constitutional referendum",
+			"anchor": "left"
+		},
+		{
+			"date": new Date("2013-07-03"),
+			"text": "Morsi ousted",
 			"anchor": "left"
 		}];
+
+	var lineLength = 20;
 
 	var datelabs = svgTimeline.selectAll(".dateLabel")
 		.data(dateLabels)
 		.enter()
 		.append("text")
 		.attr("class", "dateLabel")
-		.attr("x", widthTimeline/2+10)
-		.attr("y", function(d){ return yAxisScale(d.date); })
+		.attr("x", widthTimeline/2+lineLength)
+		.attr("y", function(d){ return yAxisScale(d.date)+(4*h); })
 		.attr("fill", "black")
 		.attr("text-anchor", function(d){ return d.anchor })
 		.text(function(d) { return d.text; });
+
+	var dateLines = svgTimeline.selectAll(".dateLine")
+		.data(dateLabels)
+		.enter()
+		.append("line")
+		.attr("class", "dateLine")
+		.attr("x1", widthTimeline/2)
+		.attr("x2", widthTimeline/2+lineLength)
+		.attr("y1", function(d){ return yAxisScale(d.date); })
+		.attr("y2", function(d){ return yAxisScale(d.date); })
+		.style("stroke", "black")
+		.style("stroke-width", "1");
 
 	svgTimeline.append("svg:rect")
 		.attr("width", widthTimeline)
@@ -282,7 +311,9 @@ var visualize = function(records){
 				return dy; 
 			})
 			.attr("height", h*s);		
-		datelabs.attr("y", function(d){ return yAxisScale(d.date); })
+		datelabs.attr("y", function(d){ return yAxisScale(d.date)+(4*h); })
+		dateLines.attr("y1", function(d){ return yAxisScale(d.date); })
+		dateLines.attr("y2", function(d){ return yAxisScale(d.date); })
 	}
 
 	// begin map stuff here 
