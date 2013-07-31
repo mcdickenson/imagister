@@ -182,7 +182,7 @@ var visualize = function(records){
 			var month = ""+(d.date.getMonth()+1);
 			if(month.length==1){ month = "0"+month; }
 			var tmpdate = d.date.getFullYear()+"-"+month+"-"+d.date.getDate();
-			plotcircles(tmpdate, d.sender, d.source, d.count);
+			// plotcircles(tmpdate, d.sender, d.source, d.count);
 		})
 		.on("mouseout", function(d){
 			tooltip.transition()
@@ -342,7 +342,7 @@ var visualize = function(records){
 		.attr("width", widthMap)
 		.attr("height", heightMap)
 		.attr("stroke", "black")
-		.style("fill", "none")
+		.style("fill", "black")
 		.style("stroke-width", 1);
 
 	var projection = d3.geo.mercator()
@@ -356,10 +356,14 @@ var visualize = function(records){
 		  .data(collection.features)
 		  .enter().append('path')
 		  .attr('d', d3.geo.path().projection(projection))
-		  .style('fill', '#383838')
-		  .style('stroke', 'black')
+		  .style('fill', '#222222')
+		  .style('stroke', 'white')
 		  .style('stroke-width', 1);
 	};
+
+	var hexbin = d3.hexbin()
+    .size([5, 5])
+    .radius(10);
 
 	// var shapefile = "data/EGY_adm0_small.json";
 	var shapefile = "data/Egypt_Region.json";
@@ -367,6 +371,8 @@ var visualize = function(records){
 		if(error){ return console.warn(error); }
 		collection = json; 
 		plotmap(collection);
+		points = getpoints();
+		plothex(points, "#444444", "basehex");
 		drawlegends();
 	});
 
@@ -394,30 +400,79 @@ var visualize = function(records){
 		return col;
 	}
 
-	plotcircles = function(date, sender, source, count){
-		svgMap.selectAll("circle").remove();
-		var mapCircles = svgMap.selectAll("circle")
-			.data(records)
-			.enter()
-			.append("circle")
-			.attr("id", function(d){ return d.Source+"."+d.SenderActor; })
-			.attr("cx", function(d){ 
-				var p = projection([d.Longitude, d.Latitude]);
-				return p[0]; 
-			})
-			.attr("cy", function(d){ 
-				var p = projection([d.Longitude, d.Latitude]);
-				return p[1]; 
-			})
-			.attr("fill", function(d){
-				var col = "none";
-				if(d.Date===date && d.Source===source && d.SenderActor===sender){
-					col = colorize2(d, count);
-				}
-				return col; 
-			})
-			.attr("r", 4);
+	plothex = function(collection, color, classtype){
+	  svgMap.append("g")
+	    .attr("clip-path", "url(#clip)")
+	  .selectAll(".hexagon")
+	    .data(hexbin(collection))
+	  .enter().append("path")
+	    .attr("class", "hexagon")
+	    .attr("id", classtype)
+	    .attr("d", hexbin.hexagon())
+	    .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+	    // .style("fill", function(d) { return color(d.length); })
+	    .style("fill",color)
 	}
+
+	function getpoints(date,sender,source)
+	{
+
+	  // THIS FUNCTION TAKES IN date, sender, source AND RETURNS PROJECTED [Long,Lat] 
+	  // THIS FUNCTION DEFAULTS TO 'all' IF ANY ARGUMENTS ARE NOT SUPPLIED
+
+	  if(typeof(date)==='undefined') date = "all";
+	  if(typeof(sender)==='undefined') sender = "all";
+	  if(typeof(source)==='undefined') source = "all";
+
+	  points = new Array();
+	  for(i in records)
+	  {
+	    if( (records[i].Date==date || date=="all") && (records[i].SenderActor==sender || sender=="all") && (records[i].Source==source || source=="all"))
+	    {
+	      points[i] = projection([records[i].Longitude,records[i].Latitude])
+	    }
+	  }
+	  return(points)
+	}
+
+	function highlighthexes(date,sender,source)
+	{
+	  color = "none";
+	  if(source=="icews")
+	    color = function(d) { return icewsScale(d.length);};
+	  if(source=="gdelt")
+	    color = function(d) { return gdeltScale(d.length);};
+
+	  var highlightedhexes = svgMap.selectAll("#highlighthex");
+	  highlightedhexes.remove();
+	  newpoints = getpoints(date,sender,source);
+	  plothex(newpoints,color,"highlighthex");
+	}
+
+	// plotcircles = function(date, sender, source, count){
+	// 	svgMap.selectAll("circle").remove();
+	// 	var mapCircles = svgMap.selectAll("circle")
+	// 		.data(records)
+	// 		.enter()
+	// 		.append("circle")
+	// 		.attr("id", function(d){ return d.Source+"."+d.SenderActor; })
+	// 		.attr("cx", function(d){ 
+	// 			var p = projection([d.Longitude, d.Latitude]);
+	// 			return p[0]; 
+	// 		})
+	// 		.attr("cy", function(d){ 
+	// 			var p = projection([d.Longitude, d.Latitude]);
+	// 			return p[1]; 
+	// 		})
+	// 		.attr("fill", function(d){
+	// 			var col = "none";
+	// 			if(d.Date===date && d.Source===source && d.SenderActor===sender){
+	// 				col = colorize2(d, count);
+	// 			}
+	// 			return col; 
+	// 		})
+	// 		.attr("r", 4);
+	// }
 
 	var legendData = [0,15,30,45,60];
 

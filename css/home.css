@@ -34,3 +34,8 @@ rect{
 	border-radius: 8px;
 	pointer-events: none;
 }
+.hexagon {
+  fill: none;
+  stroke: #000;
+  stroke-width: .5px;
+}
