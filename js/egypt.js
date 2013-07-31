@@ -416,7 +416,7 @@ var visualize = function(records){
 			.attr("r", 4);
 	}
 
-	var legendData = [0,10,20,30,40];
+	var legendData = [0,15,30,45,60];
 
 	var drawlegends = function(){
 		svgMap.selectAll("legend_gdelt")
@@ -424,7 +424,7 @@ var visualize = function(records){
 			.enter()
 			.append("rect")
 			.attr("x", 10)
-			.attr("y", function(d){ return height - 30 - (d*2); })
+			.attr("y", function(d){ return height - 30 - (d*4/3); })
 			.attr("height", 20)
 			.attr("width", 20)
 			.attr("fill", function(d){ return gdeltScale(d); });
@@ -434,13 +434,13 @@ var visualize = function(records){
 			.enter()
 			.append("rect")
 			.attr("x", 30)
-			.attr("y", function(d){ return height - 30 - (d*2); })
+			.attr("y", function(d){ return height - 30 - (d*4/3); })
 			.attr("height", 20)
 			.attr("width", 20)
 			.attr("fill", function(d){ return icewsScale(d); });
 
 		svgMap.append("text")
-		  .text(countMaxRounded)
+		  .text(legendData[legendData.length-1])
 		  .attr("x",32)
 		  .attr("y",height-95)
 		  .attr("fill",icewsScale(0));
