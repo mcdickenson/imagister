@@ -193,22 +193,26 @@ var visualize = function(records){
 		{
 			"date": new Date("2012-06-18"),
 			"text": "Morsi elected",
-			"anchor": "left"
+			"anchor": "left",
+			"url": "http://mideast.foreignpolicy.com/posts/2012/06/18/after_egypt_s_election_mohamed_morsi_claims_victory_as_military_consolidates_power"
 		},
 		{
 			"date": new Date("2012-12-05"),
 			"text": "March on palace",
-			"anchor": "left"
+			"anchor": "left",
+			"url": "http://mideast.foreignpolicy.com/posts/2012/12/06/the_egyptian_army_deploys_tanks_to_break_up_violent_protests"
 		},
 		{
 			"date": new Date("2012-12-15"),
 			"text": "Constitutional referendum",
-			"anchor": "left"
+			"anchor": "left",
+			"url": "http://mideast.foreignpolicy.com/posts/2012/12/17/egypt_s_constitution_wins_narrow_approval_amid_accusations_of_polling_violations"
 		},
 		{
 			"date": new Date("2013-07-03"),
 			"text": "Morsi ousted",
-			"anchor": "left"
+			"anchor": "left",
+			"url": "http://mideast.foreignpolicy.com/posts/2013/07/05/thousands_of_egyptian_islamists_protest_ouster_of_morsi"
 		}];
 
 	var lineLength = 20;
@@ -222,7 +226,13 @@ var visualize = function(records){
 		.attr("y", function(d){ return yAxisScale(d.date)+(4*h); })
 		.attr("fill", "black")
 		.attr("text-anchor", function(d){ return d.anchor })
-		.text(function(d) { return d.text; });
+		.text(function(d) { return d.text; })
+		.on("click", function(d) { 
+			// alert(d.url); 
+			newwindow = window.open(d.url,"name");
+			if(window.focus){ newwindow.focus(); }
+			return false;
+		});
 
 	var dateLines = svgTimeline.selectAll(".dateLine")
 		.data(dateLabels)
@@ -234,7 +244,7 @@ var visualize = function(records){
 		.attr("y1", function(d){ return yAxisScale(d.date); })
 		.attr("y2", function(d){ return yAxisScale(d.date); })
 		.style("stroke", "black")
-		.style("stroke-width", "1");
+		.style("stroke-width", "0.7");
 
 	svgTimeline.append("svg:rect")
 		.attr("width", widthTimeline)
