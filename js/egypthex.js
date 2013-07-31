@@ -182,7 +182,7 @@ var visualize = function(records){
 			var month = ""+(d.date.getMonth()+1);
 			if(month.length==1){ month = "0"+month; }
 			var tmpdate = d.date.getFullYear()+"-"+month+"-"+d.date.getDate();
-			// plotcircles(tmpdate, d.sender, d.source, d.count);
+			highlighthexes(tmpdate, d.sender, d.source);
 		})
 		.on("mouseout", function(d){
 			tooltip.transition()
@@ -448,31 +448,6 @@ var visualize = function(records){
 	  newpoints = getpoints(date,sender,source);
 	  plothex(newpoints,color,"highlighthex");
 	}
-
-	// plotcircles = function(date, sender, source, count){
-	// 	svgMap.selectAll("circle").remove();
-	// 	var mapCircles = svgMap.selectAll("circle")
-	// 		.data(records)
-	// 		.enter()
-	// 		.append("circle")
-	// 		.attr("id", function(d){ return d.Source+"."+d.SenderActor; })
-	// 		.attr("cx", function(d){ 
-	// 			var p = projection([d.Longitude, d.Latitude]);
-	// 			return p[0]; 
-	// 		})
-	// 		.attr("cy", function(d){ 
-	// 			var p = projection([d.Longitude, d.Latitude]);
-	// 			return p[1]; 
-	// 		})
-	// 		.attr("fill", function(d){
-	// 			var col = "none";
-	// 			if(d.Date===date && d.Source===source && d.SenderActor===sender){
-	// 				col = colorize2(d, count);
-	// 			}
-	// 			return col; 
-	// 		})
-	// 		.attr("r", 4);
-	// }
 
 	var legendData = [0,15,30,45,60];
 
