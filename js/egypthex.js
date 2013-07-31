@@ -6,8 +6,8 @@ var margin = {
 	left: 30,
 	right: 30
 };
-var height = 800 - margin.top - margin.bottom,
-	heightMap = 800 - margin.top - margin.bottom;
+var height = window.innerHeight - 100 - margin.top - margin.bottom,
+	heightMap = height;
 var widthTimeline = 400 - margin.left - margin.right,
 	widthMap = 600 - margin.right - margin.left,
 	widthTotal = widthTimeline + widthMap + margin.left + margin.right;
