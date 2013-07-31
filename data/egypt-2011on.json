@@ -130,6 +130,36 @@
 		"Source": "gdelt"
 	},
 	{
+		"SenderActor": "govt",
+		"Action": "repress",
+		"ReceiverActor": "anti",
+		"Date": "2011-01-25",
+		"Latitude": "30.05",
+		"Longitude": "31.25",
+		"Country": "Egypt",
+		"Source": "gdelt"
+	},
+	{
+		"SenderActor": "govt",
+		"Action": "repress",
+		"ReceiverActor": "anti",
+		"Date": "2011-01-25",
+		"Latitude": "30.05",
+		"Longitude": "31.25",
+		"Country": "Egypt",
+		"Source": "gdelt"
+	},
+	{
+		"SenderActor": "govt",
+		"Action": "repress",
+		"ReceiverActor": "anti",
+		"Date": "2011-01-25",
+		"Latitude": "30.05",
+		"Longitude": "31.25",
+		"Country": "Egypt",
+		"Source": "gdelt"
+	},
+	{
 		"SenderActor": "anti",
 		"Action": "protest",
 		"ReceiverActor": "govt",
@@ -170,6 +200,26 @@
 		"Source": "gdelt"
 	},
 	{
+		"SenderActor": "anti",
+		"Action": "protest",
+		"ReceiverActor": "govt",
+		"Date": "2011-01-26",
+		"Latitude": "30.05",
+		"Longitude": "31.25",
+		"Country": "Egypt",
+		"Source": "gdelt"
+	},
+	{
+		"SenderActor": "anti",
+		"Action": "protest",
+		"ReceiverActor": "govt",
+		"Date": "2011-01-26",
+		"Latitude": "30.05",
+		"Longitude": "31.25",
+		"Country": "Egypt",
+		"Source": "gdelt"
+	},
+	{
 		"SenderActor": "govt",
 		"Action": "repress",
 		"ReceiverActor": "anti",
@@ -196,6 +246,16 @@
 		"Date": "2011-01-26",
 		"Latitude": "29.9737",
 		"Longitude": "32.5263",
+		"Country": "Egypt",
+		"Source": "gdelt"
+	},
+	{
+		"SenderActor": "anti",
+		"Action": "protest",
+		"ReceiverActor": "govt",
+		"Date": "2011-01-27",
+		"Latitude": "30.05",
+		"Longitude": "31.25",
 		"Country": "Egypt",
 		"Source": "gdelt"
 	},
@@ -336,6 +396,16 @@
 		"Date": "2011-01-28",
 		"Latitude": "30.8358",
 		"Longitude": "30.6421",
+		"Country": "Egypt",
+		"Source": "gdelt"
+	},
+	{
+		"SenderActor": "anti",
+		"Action": "protest",
+		"ReceiverActor": "govt",
+		"Date": "2011-01-28",
+		"Latitude": "30.05",
+		"Longitude": "31.25",
 		"Country": "Egypt",
 		"Source": "gdelt"
 	},
@@ -980,6 +1050,16 @@
 		"Source": "gdelt"
 	},
 	{
+		"SenderActor": "govt",
+		"Action": "repress",
+		"ReceiverActor": "anti",
+		"Date": "2011-05-27",
+		"Latitude": "30.05",
+		"Longitude": "31.25",
+		"Country": "Egypt",
+		"Source": "gdelt"
+	},
+	{
 		"SenderActor": "anti",
 		"Action": "protest",
 		"ReceiverActor": "govt",
@@ -1393,6 +1473,16 @@
 		"SenderActor": "anti",
 		"Action": "protest",
 		"ReceiverActor": "govt",
+		"Date": "2011-09-16",
+		"Latitude": "30.05",
+		"Longitude": "31.25",
+		"Country": "Egypt",
+		"Source": "gdelt"
+	},
+	{
+		"SenderActor": "anti",
+		"Action": "protest",
+		"ReceiverActor": "govt",
 		"Date": "2011-09-17",
 		"Latitude": "30.05",
 		"Longitude": "31.25",
@@ -1586,6 +1676,16 @@
 		"Date": "2011-11-20",
 		"Latitude": "26.557",
 		"Longitude": "31.6948",
+		"Country": "Egypt",
+		"Source": "gdelt"
+	},
+	{
+		"SenderActor": "govt",
+		"Action": "repress",
+		"ReceiverActor": "anti",
+		"Date": "2011-11-20",
+		"Latitude": "44.65",
+		"Longitude": "-63.6",
 		"Country": "Egypt",
 		"Source": "gdelt"
 	},
@@ -2390,6 +2490,16 @@
 		"Source": "gdelt"
 	},
 	{
+		"SenderActor": "anti",
+		"Action": "protest",
+		"ReceiverActor": "govt",
+		"Date": "2012-09-01",
+		"Latitude": "30.05",
+		"Longitude": "31.25",
+		"Country": "Egypt",
+		"Source": "gdelt"
+	},
+	{
 		"SenderActor": "govt",
 		"Action": "repress",
 		"ReceiverActor": "anti",
@@ -2463,6 +2573,26 @@
 		"SenderActor": "anti",
 		"Action": "protest",
 		"ReceiverActor": "govt",
+		"Date": "2012-09-14",
+		"Latitude": "30.05",
+		"Longitude": "31.25",
+		"Country": "Egypt",
+		"Source": "gdelt"
+	},
+	{
+		"SenderActor": "govt",
+		"Action": "repress",
+		"ReceiverActor": "anti",
+		"Date": "2012-09-14",
+		"Latitude": "30.05",
+		"Longitude": "31.25",
+		"Country": "Egypt",
+		"Source": "gdelt"
+	},
+	{
+		"SenderActor": "govt",
+		"Action": "repress",
+		"ReceiverActor": "anti",
 		"Date": "2012-09-14",
 		"Latitude": "30.05",
 		"Longitude": "31.25",

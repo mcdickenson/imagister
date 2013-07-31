@@ -51,6 +51,7 @@ combo$Longitude = combo$ActionGeo_Long
 # country and source 
 combo$Country = NA 
 combo$Country = ifelse(combo$Actor1Geo_CountryCode=="EG", "Egypt", combo$Country)
+# combo$Country = "Egypt"
 combo$Country = ifelse(combo$Actor1Geo_CountryCode=="SY", "Syria", combo$Country)
 combo$Country = ifelse(combo$Actor1Geo_CountryCode=="TU", "Turkey", combo$Country)
 combo$Source = "gdelt"

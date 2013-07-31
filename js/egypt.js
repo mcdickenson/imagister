@@ -1,12 +1,12 @@
-var minDate = new Date("2012-06-01");
-var maxDate = new Date("2013-07-08");
+var minDate = new Date("2011-01-01");
+var maxDate = new Date("2013-07-22");
 var margin = {
 	top: 30,
 	bottom: 20,
 	left: 30,
 	right: 30
 };
-var height = 600 - margin.top - margin.bottom;
+var height = 800 - margin.top - margin.bottom;
 var widthTimeline = 400 - margin.left - margin.right,
 	widthMap = 600 - margin.right - margin.left,
 	widthTotal = widthTimeline + widthMap + margin.left + margin.right;
@@ -19,7 +19,7 @@ var orange = "#FECC5C",
 var formatTime = d3.time.format("%e %B");
 
 var records; 
-d3.json("data/testfile.json", function(error, json){
+d3.json("data/egypt-2011on.json", function(error, json){
 	if(error){ return console.warn(error); }
 	records = json; 
 	visualize(records);
@@ -104,7 +104,7 @@ var visualize = function(records){
 
 	var yAxis = d3.svg.axis()
 		.scale(yAxisScale)
-		.ticks(d3.time.months, 1)
+		.ticks(d3.time.months, 2)
 		.orient("left")
 		.tickSize(50, 0, 0);
 
