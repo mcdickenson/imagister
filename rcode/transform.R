@@ -12,6 +12,7 @@ egy = read.delim('egypt.tsv', as.is=TRUE)
 syr = read.delim('syria.tsv', as.is=TRUE)
 tur = read.delim('turkey.tsv', as.is=TRUE)
 combo = rbind(egy, syr, tur)
+# combo = egy 
 dim(combo)
 
 #######
@@ -56,7 +57,6 @@ combo$Source = "gdelt"
 
 #######
 # subset to data wanted (rows, then cols)
-
 wantcols = c("SenderActor", "Action", "ReceiverActor", "Date", "Latitude", "Longitude", "Country", "Source")
 subset = combo[, wantcols]
 subset = subset[complete.cases(subset), ]
@@ -83,6 +83,13 @@ subset = subset[-notwant, ]
 
 subset = subset[order(subset$Country, subset$Date, subset$SenderActor), ]
 
+# egy = subset 
+# want = which(egy$Date >= as.Date("2011-01-01"))
+# length(want)
+# egy = egy[want, ]
+# min(egy$Date)
+# max(egy$Date)
+
 dim(subset) # 3,535
 min(subset$Date) # 2001-01-13
 max(subset$Date) # 2013-07-25
@@ -94,3 +101,6 @@ tail(subset)
 write.csv(subset, file="gdelt-egy-syr-tur-subset-20130725.csv", row.names=FALSE)
 
 toJSON(subset, filename="gdelt20130725.json")
+
+# setwd("~/github/imagister/data")
+# toJSON(egy, filename="gdelt-egypt-2011on.json")
