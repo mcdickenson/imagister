@@ -6,7 +6,8 @@ var margin = {
 	left: 30,
 	right: 30
 };
-var height = 800 - margin.top - margin.bottom;
+var height = 800 - margin.top - margin.bottom,
+	heightMap = 800 - margin.top - margin.bottom;
 var widthTimeline = 400 - margin.left - margin.right,
 	widthMap = 600 - margin.right - margin.left,
 	widthTotal = widthTimeline + widthMap + margin.left + margin.right;
@@ -329,7 +330,9 @@ var visualize = function(records){
 	// begin map stuff here 
 	var svgMap = d3.select("body").append("svg")
 		.attr("width", widthMap)
-		.attr("height", height)
+		.attr("height", heightMap)
+		.attr("y", 0)
+		.attr("position", "absolute")
 		.attr("id", "map")
 		.attr("transform", "translate("+margin.top+","+(margin.left+widthTimeline)+")");
 
@@ -337,14 +340,14 @@ var visualize = function(records){
 		.attr("x", 0)
 		.attr("y", 0)
 		.attr("width", widthMap)
-		.attr("height", height)
+		.attr("height", heightMap)
 		.attr("stroke", "black")
 		.style("fill", "none")
 		.style("stroke-width", 1);
 
 	var projection = d3.geo.mercator()
     .scale(2000)
-    .center([0, 30.05])
+    .center([0, 32.05])
     .rotate([-31.226, 0])
     .translate([widthTimeline, 150]);	
 
@@ -424,7 +427,7 @@ var visualize = function(records){
 			.enter()
 			.append("rect")
 			.attr("x", 10)
-			.attr("y", function(d){ return height - 30 - (d*4/3); })
+			.attr("y", function(d){ return heightMap - 30 - (d*4/3); })
 			.attr("height", 20)
 			.attr("width", 20)
 			.attr("fill", function(d){ return gdeltScale(d); });
@@ -434,7 +437,7 @@ var visualize = function(records){
 			.enter()
 			.append("rect")
 			.attr("x", 30)
-			.attr("y", function(d){ return height - 30 - (d*4/3); })
+			.attr("y", function(d){ return heightMap - 30 - (d*4/3); })
 			.attr("height", 20)
 			.attr("width", 20)
 			.attr("fill", function(d){ return icewsScale(d); });
@@ -442,13 +445,13 @@ var visualize = function(records){
 		svgMap.append("text")
 		  .text(legendData[legendData.length-1])
 		  .attr("x",32)
-		  .attr("y",height-95)
+		  .attr("y",heightMap-95)
 		  .attr("fill",icewsScale(0));
 
 	  svgMap.append("text")
 		  .text("1")
 		  .attr("x",35)
-		  .attr("y",height-15)
+		  .attr("y",heightMap-15)
 		  .attr("fill",icewsScale(countMax));
 	}
 
