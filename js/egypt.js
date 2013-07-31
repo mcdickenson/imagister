@@ -364,17 +364,18 @@ var visualize = function(records){
 		if(error){ return console.warn(error); }
 		collection = json; 
 		plotmap(collection);
+		drawlegends();
 	});
 
 	var scaleavg = countMax/2;
 
 	var icewsScale = d3.scale.linear()
-		.domain([0, scaleavg, countMax])
+		.domain([0, scaleavg, countMaxRounded])
 		.range(["#C7E9B4","#41B6C4","#253494"])
 		.interpolate(d3.interpolateLab);
 
 	var gdeltScale = d3.scale.linear()
-		.domain([0, scaleavg, countMax])
+		.domain([0, scaleavg, countMaxRounded])
 		.range(["#FED976","#FD8D3C","#BD0026"])
 		.interpolate(d3.interpolateLab);
 
@@ -413,6 +414,42 @@ var visualize = function(records){
 				return col; 
 			})
 			.attr("r", 4);
+	}
+
+	var legendData = [0,10,20,30,40];
+
+	var drawlegends = function(){
+		svgMap.selectAll("legend_gdelt")
+			.data(legendData)
+			.enter()
+			.append("rect")
+			.attr("x", 10)
+			.attr("y", function(d){ return height - 30 - (d*2); })
+			.attr("height", 20)
+			.attr("width", 20)
+			.attr("fill", function(d){ return gdeltScale(d); });
+
+		svgMap.selectAll("legend_icews")
+			.data(legendData)
+			.enter()
+			.append("rect")
+			.attr("x", 30)
+			.attr("y", function(d){ return height - 30 - (d*2); })
+			.attr("height", 20)
+			.attr("width", 20)
+			.attr("fill", function(d){ return icewsScale(d); });
+
+		svgMap.append("text")
+		  .text(countMaxRounded)
+		  .attr("x",32)
+		  .attr("y",height-95)
+		  .attr("fill",icewsScale(0));
+
+	  svgMap.append("text")
+		  .text("1")
+		  .attr("x",35)
+		  .attr("y",height-15)
+		  .attr("fill",icewsScale(countMax));
 	}
 
 }
