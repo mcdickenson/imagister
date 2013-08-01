@@ -35,7 +35,7 @@ Date.prototype.addDays = function(days) {
 function getDates(startDate, stopDate) {
   var dateArray = new Array();
   var currentDate = startDate;
-  while (currentDate <= stopDate) {
+  while (currentDate <= stopDate.addDays(1)) {
     dateArray.push(currentDate.toDateString());
     currentDate = currentDate.addDays(1);
   }
@@ -62,7 +62,7 @@ for(var i=0; i<daySeq.length; i++){
 var visualize = function(records){
 	var countMax = 0; 
 	for(var i=0; i<records.length; i++){
-		var ix = daySeq.indexOf((new Date(records[i].Date)).toDateString() );
+		var ix = daySeq.indexOf( (new Date(records[i].Date)).addDays(1).toDateString() );
 		dayCounts[ix][records[i].Source][records[i].SenderActor] += 1
 		var mag = dayCounts[ix][records[i].Source][records[i].SenderActor];
 		if( mag > countMax){ countMax=mag; }
@@ -143,6 +143,13 @@ var visualize = function(records){
 		return col;
 	}
 
+	var dateToYMD = function(date){
+		var d = date.getDate();
+		var m = date.getMonth() + 1;
+		var y = date.getFullYear();
+		return "" + y + "-" + (m<=9 ? "0"+m : m) + "-" + (d<=9 ? "0"+d : d);
+	}
+
 	var rects = svgTimeline.selectAll(".series")
 			.data(series)
 		.enter().append("g")
@@ -179,9 +186,7 @@ var visualize = function(records){
 			tooltip.html(formatTime(d.date) + "<br/>" + d.count + " events (" + d.source.toUpperCase() + ")")
 				.style("left", (d3.event.pageX ) +"px")
 				.style("top", (d3.event.pageY ) +"px");
-			var month = ""+(d.date.getMonth()+1);
-			if(month.length==1){ month = "0"+month; }
-			var tmpdate = d.date.getFullYear()+"-"+month+"-"+d.date.getDate();
+			var tmpdate = dateToYMD(d.date);
 			highlighthexes(tmpdate, d.sender, d.source);
 		})
 		.on("mouseout", function(d){
