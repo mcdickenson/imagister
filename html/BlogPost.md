@@ -18,12 +18,12 @@ While the data are collected via separate and distinct processes, we are able to
 
 ## What can we learn from each?
 
-The visualizations presented herein illuminate several intersting features of the data. First, both data sets do seem to accurately capture significant events. For example, in the timeline graphic for Egypt, both data sets demonstrate spikes in protests near the time of the consitutional referendum and the anti-government march on the presidential palace. Similarly, both data sets show the rising tide of protest events in Turkey as a recent phenomenon. 
+The visualizations presented herein illuminate several interesting features of the data. First, both data sets do seem to accurately capture significant events. For example, in the timeline graphic for Egypt, both data sets demonstrate spikes in protests near the time of the consitutional referendum and the anti-government march on the presidential palace. Similarly, both data sets show the rising tide of protest events in Turkey as a recent phenomenon. 
 
 However, the two data sources do seem to differ in their reporting in that GDELT is more sensitive to media trends over time. Looking at the timeline for Syria, one can see that GDELT generally records more events than ICEWS but eventually fades over time. It appears that GDELT likely picks up on more media fatigue than does the ICEWS data; this seems to echo the suggestions of [David Masad](http://themonkeycage.org/2013/07/09/how-computers-can-help-us-track-violent-conflicts-including-right-now-in-syria/) and [Jay Ulfelder](http://dartthrowingchimp.wordpress.com/2013/05/16/challenges-in-measuring-violent-conflict-syria-edition/). As Ulfelder writes "
 ... press coverage of a sustained and intense conflicts is often high when hostilities first break out but then declines steadily thereafter. That decline can happen because editors and readers get bored, burned out, or distracted. It can also happen because the conflict gets so intense that it becomes, in a sense, too dangerous to cover." 
 
-Last, while the process of production for the ICEWS data might result in a narrow, more highly vetted corpus of event data, it does not have the same geo-spatial sensitivty as GDELT. As is evident in the various maps provided here, GDELT's geographical distribution is more dynamic. 
+Last, while the process of production for the ICEWS data might result in a narrow, more highly vetted corpus of event data, it does not have the same geo-spatial sensitivity as GDELT. As is evident in the various maps provided here, GDELT's geographical distribution is more detailed. 
 
 ## Notes & To-do's:
 
