@@ -6,6 +6,7 @@ lib-cov
 *.pid
 *.gz
 *.Rhistory
+Thumbs.db
 
 pids
 logs
