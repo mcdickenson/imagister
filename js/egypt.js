@@ -13,10 +13,10 @@ var widthTimeline = 400 - margin.left - margin.right,
 	widthTotal = widthTimeline + widthMap + margin.left + margin.right;
 var increment = 5; 
 
-var orange = "#FECC5C",
-	blue = "#41B6C4";
+var green = "#B2DF8A",
+	blue = "#1F78B4";
 	icewsColor=blue,
-	gdeltColor=orange;
+	gdeltColor=green;
 var formatTime = d3.time.format("%e %B");
 
 var records; 
