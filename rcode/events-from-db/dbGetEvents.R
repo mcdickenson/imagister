@@ -18,7 +18,7 @@ formatList <- function(vector) {
 dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes) 
   {
   if (!data.source %in% c("icews", "gdelt")) stop("data.source must be 'icews' or 'gdelt'")
-  if (as.Date(start.date) <= as.Date(end.date)) stop("start date must be before end date")
+  if (as.Date(start.date) >= as.Date(end.date)) stop("start date must be before end date")
   
   # End date for GDELT historical files
   gdelt.historical.end <- as.Date("2013-03-31")
@@ -37,18 +37,18 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
     # 2013-03-31. Depending on where start and end date are, there are
     # three possible cases for what we need to query.
     if (start.date < gdelt.historical.end & end.date > gdelt.historical.end) {
-      start1 <- start.date
-      end1 <- gdelt.historical.end
-      start2 <- gdelt.historical.end + 1
-      end2 <- end.date
+      start1 <- as.numeric(gsub("-", "", as.character(start.date)))
+      end1 <- as.numeric(gsub("-", "", as.character(gdelt.historical.end)))
+      start2 <- as.numeric(gsub("-", "", as.character(gdelt.historical.end + 1)))
+      end2 <- as.numeric(gsub("-", "", as.character(end.date)))
     } else {  
       # If date range does not overlap table cutoff, then only one of the 
       # queries below will run, so we don't have to worry about assigned same 
       # dates to both.
-      start1 <- start.date
-      end1 <- end.date
-      start2 <- start.date
-      end2 <- end.date
+      start1 <- as.numeric(gsub("-", "", as.character(start.date)))
+      end1 <- as.numeric(gsub("-", "", as.character(end.date)))
+      start2 <- as.numeric(gsub("-", "", as.character(start.date)))
+      end2 <- as.numeric(gsub("-", "", as.character(end.date)))
     }
     
     # Initiate results so we can combine them later on even if ran only one SQL
@@ -89,6 +89,7 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
     # Combine results
     res <- rbind(res1, res2)  # if we did only one query, one of these will be
                               # NULL, which does not affect rbind()
+    res$date <- as.Date(as.character(res$date), format="%Y%m%d")
     dbSendQuery(conn, "DROP TABLE temp_results;")
   }
   
@@ -122,22 +123,25 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
       "AND eventtype_ID IN ", formatList(icews.codes), "\n",
       "LIMIT 1;")
     dbSendQuery(conn, sql)
-    # Add location and cameo codes
-    dbSendQuery(conn, "ALTER TABLE temp_results ADD COLUMN latitude float;")
-    dbSendQuery(conn, paste0(
-      "UPDATE temp_results JOIN locations \n",
-      "SET temp_results.latitude = locations.Latitude \n",
-      "WHERE (temp_results.location_ID = locations.location_ID);"))
-    dbSendQuery(conn, "ALTER TABLE temp_results ADD COLUMN longitude float;")
-    dbSendQuery(conn, paste0(
-      "UPDATE temp_results JOIN locations \n",
-      "SET temp_results.longitude = locations.Longitude \n",
-      "WHERE (temp_results.location_ID = locations.location_ID);"))
+    # Add cameo codes
     dbSendQuery(conn, "ALTER TABLE temp_results ADD COLUMN cameo_code varchar(6);")
     dbSendQuery(conn, paste0(
       "UPDATE temp_results JOIN eventtypes \n",
       "SET temp_results.cameo_code = eventtypes.code \n",
       "WHERE (temp_results.eventtype_ID = eventtypes.eventtype_ID);"))
+    # Add latitude
+    dbSendQuery(conn, "ALTER TABLE temp_results ADD COLUMN latitude float;")
+    dbSendQuery(conn, paste0(
+      "UPDATE temp_results JOIN locations \n",
+      "SET temp_results.latitude = locations.Latitude \n",
+      "WHERE (temp_results.location_ID = locations.location_ID);"))
+    # Add longitude
+    dbSendQuery(conn, "ALTER TABLE temp_results ADD COLUMN longitude float;")
+    dbSendQuery(conn, paste0(
+      "UPDATE temp_results JOIN locations \n",
+      "SET temp_results.longitude = locations.Longitude \n",
+      "WHERE (temp_results.location_ID = locations.location_ID);"))
+    # Drop eventtype and location keys
     dbSendQuery(conn, "ALTER TABLE temp_results 
                 DROP COLUMN eventtype_ID,
                 DROP COLUMN location_ID;")
@@ -149,8 +153,8 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
 
 # Test it
 codes <- c(141, 1411, 1412, 1413, 1414)
-test <- dbGetEvents("gdelt", "Egypt", "2011-01-01", "2011-01-03", codes)
-
+test1 <- dbGetEvents("icews", "Egypt", "2013-06-01", "2013-06-03", codes)
+test2 <- dbGetEvents("gdelt", "Egypt", "2013-06-01", "2013-06-03", codes)
 
 # End, close connection ---------------------------------------------------
 
