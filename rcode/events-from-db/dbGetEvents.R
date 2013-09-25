@@ -67,7 +67,7 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
         "WHERE actiongeo_countrycode = '", isocode, "'\n",
         "AND sqldate BETWEEN '", start1, "' AND '", end1, "'\n",
         "AND eventcode IN ", formatList(cameo.codes), "\n",
-        "LIMIT 1;")
+        ";")
       dbSendQuery(conn, sql)
       res1 <- dbGetQuery(conn, "SELECT * FROM temp_results;")
     } else if (end.date > gdelt.historical.end) {
@@ -82,7 +82,7 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
         "WHERE actiongeo_countrycode = '", isocode, "'\n",
         "AND sqldate BETWEEN '", start2, "' AND '", end2, "'\n",
         "AND eventcode IN ", formatList(cameo.codes), "\n",
-        "LIMIT 1;")
+        ";")
       dbSendQuery(conn, sql)
       res2 <- dbGetQuery(conn, "SELECT * FROM temp_results;")
     } 
@@ -121,7 +121,7 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
       "(SELECT location_id FROM locations WHERE country_id = ", country_id, ")\n",
       "AND event_date BETWEEN '", start.date, "' AND '", end.date, "'\n",
       "AND eventtype_ID IN ", formatList(icews.codes), "\n",
-      "LIMIT 1;")
+      ";")
     dbSendQuery(conn, sql)
     # Add cameo codes
     dbSendQuery(conn, "ALTER TABLE temp_results ADD COLUMN cameo_code varchar(6);")
