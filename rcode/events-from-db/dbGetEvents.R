@@ -4,8 +4,6 @@
 # AB
 # September 2013
 
-source(dbSetup.R)
-
 formatList <- function(vector) {
   # Format a list for SQL
   res <- "("
@@ -20,9 +18,81 @@ formatList <- function(vector) {
 dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes) 
   {
   if (!data.source %in% c("icews", "gdelt")) stop("data.source must be 'icews' or 'gdelt'")
+  if (as.Date(start.date) <= as.Date(end.date)) stop("start date must be before end date")
   
-  # for ICEWS for now
+  # End date for GDELT historical files
+  gdelt.historical.end <- as.Date("2013-03-30")
+    
+  # Query for GDELT as source
+  if (data.source=="gdelt") {
+    
+    # Get ISO country code
+    sql <- paste0(
+      "SELECT isocode FROM countries WHERE countryname='",
+      toupper(country),
+      "';")
+    isocode <- dbGetQuery(conn, sql)
+    
+    # In db, gdelt is separated into two tables split by the date
+    # 2013-03-30. Depending on where start and end date are, there are
+    # three possible cases for what we need to query.
+    if (start.date < gdelt.historical.end & end.date > gdelt.historical.end) {
+      start1 <- start.date
+      end1 <- gdelt.historical.end
+      start2 <- gdelt.historical.end + 1
+      end2 <- end.date
+    } else {  
+      # If date range does not overlap table cutoff, then only one of the 
+      # queries below will run, so we don't have to worry about assigned same 
+      # dates to both.
+      start1 <- start.date
+      end1 <- end.date
+      start2 <- start.date
+      end2 <- end.date
+    }
+    
+    # Initiate results so we can combine them later on even if ran only one SQL
+    res1 <- res2 <- NULL
+    
+    # Start queries
+    if (start.date < gdelt.historical.end) {
+      # Only query historical table
+      dbSendQuery(conn, "DROP TABLE IF EXISTS temp_results;")
+      sql <- paste0(
+        "CREATE TABLE temp_results AS \n",
+        "SELECT 'gdelt' AS source, '", country, "' AS country, \n",
+        "    sqldate AS date, eventcode AS cameo_code, \n",
+        "    actiongeo_lat AS latitude, actiongeo_long AS longitude \n",
+        "FROM gdelt_historical \n",
+        "WHERE actiongeo_countrycode = '", isocode, "'\n",
+        "AND sqldate BETWEEN '", start1, "' AND '", end1, "'\n",
+        "AND eventcode IN ", formatList(cameo.codes), "\n",
+        "LIMIT 1;")
+      dbSendQuery(conn, sql)
+      res1 <- dbGetQuery(conn, "SELECT * FROM temp_results;")
+    } else if (end.date > gdelt.historical.end) {
+      # Only query daily updates table
+      dbSendQuery(conn, "DROP TABLE IF EXISTS temp_results;")
+      sql <- paste0(
+        "CREATE TABLE temp_results AS \n",
+        "SELECT 'gdelt' AS source, '", country, "' AS country, \n",
+        "    sqldate AS date, eventcode AS cameo_code, \n",
+        "    actiongeo_lat AS latitude, actiongeo_long AS longitude \n",
+        "FROM gdelt_dailyupdates \n",
+        "WHERE actiongeo_countrycode = '", isocode, "'\n",
+        "AND sqldate BETWEEN '", start2, "' AND '", end2, "'\n",
+        "AND eventcode IN ", formatList(cameo.codes), "\n",
+        "LIMIT 1;")
+      dbSendQuery(conn, sql)
+      res2 <- dbGetQuery(conn, "SELECT * FROM temp_results;")
+    } 
+    # Combine results
+    res <- rbind(res1, res2)  # if we did only one query, one of these will be
+                              # NULL, which does not affect rbind()
+    dbSendQuery(conn, "DROP TABLE temp_results;")
+  }
   
+  # Query for ICEWS as data source
   if (data.source=="icews") {
     # Get country ID
     # In future add something to check whether country is in CountryName
@@ -50,7 +120,7 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
       "(SELECT location_id FROM locations WHERE country_id = ", country_id, ")\n",
       "AND event_date BETWEEN '", start.date, "' AND '", end.date, "'\n",
       "AND eventtype_ID IN ", formatList(icews.codes), "\n",
-      "LIMIT 20;")
+      "LIMIT 1;")
     dbSendQuery(conn, sql)
     # Add location and cameo codes
     dbSendQuery(conn, "ALTER TABLE temp_results ADD COLUMN latitude float;")
@@ -79,7 +149,7 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
 
 # Test it
 codes <- c(141, 1411, 1412, 1413, 1414)
-test <- dbGetEvents("icews", "Egypt", "2011-01-01", "2011-01-03", codes)
+test <- dbGetEvents("gdelt", "Egypt", "2011-01-01", "2011-01-03", codes)
 
 
 # End, close connection ---------------------------------------------------

@@ -10,6 +10,7 @@ dbSetup <- function() {
     db.user <- "ab428"
     db.pw <- ""
   }
+  if (db.pw=="") stop("Fill in database password")
   
   # Try MySQL
   library(RMySQL)
