@@ -156,6 +156,36 @@ codes <- c(141, 1411, 1412, 1413, 1414)
 test1 <- dbGetEvents("icews", "Egypt", "2013-06-01", "2013-06-03", codes)
 test2 <- dbGetEvents("gdelt", "Egypt", "2013-06-01", "2013-06-03", codes)
 
+
+# Write csv ---------------------------------------------------------------
+
+
+prot.codes <- c(141, 1411, 1412, 1413, 1414, 145, 1451, 1452, 1453, 1454)
+conf.codes <- c()
+
+# Egypt
+t1 <- dbGetEvents("icews", "Egypt", "2011-01-01", "2013-08-31", prot.codes)
+t2 <- dbGetEvents("gdelt", "Egypt", "2011-01-01", "2013-08-31", prot.codes)
+egypt <- rbind(t1, t2); rm(t1, t2)
+write.csv(egypt, file="egypt.csv")
+
+# Syria
+t1 <- dbGetEvents("icews", "Syria", "2011-01-01", "2013-08-31", conf.codes)
+t2 <- dbGetEvents("gdelt", "Syria", "2011-01-01", "2013-08-31", conf.codes)
+syria <- rbind(t1, t2); rm(t1, t2)
+write.csv(syria, file="syria.csv")
+
+# Turkey
+t1 <- dbGetEvents("icews", "Turkey", "2011-01-01", "2013-08-31", prot.codes)
+t2 <- dbGetEvents("gdelt", "Turkey", "2011-01-01", "2013-08-31", prot.codes)
+turkey <- rbind(t1, t2); rm(t1, t2)
+write.csv(turkey, file="turkey.csv")
+
+# All
+all <- rbind(egypt, syria, turkey)
+write.csv(all, file="all.csv")
+
+
 # End, close connection ---------------------------------------------------
 
 
