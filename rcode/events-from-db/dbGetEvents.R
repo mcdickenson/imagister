@@ -21,7 +21,7 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
   if (as.Date(start.date) <= as.Date(end.date)) stop("start date must be before end date")
   
   # End date for GDELT historical files
-  gdelt.historical.end <- as.Date("2013-03-30")
+  gdelt.historical.end <- as.Date("2013-03-31")
     
   # Query for GDELT as source
   if (data.source=="gdelt") {
@@ -34,7 +34,7 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
     isocode <- dbGetQuery(conn, sql)
     
     # In db, gdelt is separated into two tables split by the date
-    # 2013-03-30. Depending on where start and end date are, there are
+    # 2013-03-31. Depending on where start and end date are, there are
     # three possible cases for what we need to query.
     if (start.date < gdelt.historical.end & end.date > gdelt.historical.end) {
       start1 <- start.date
