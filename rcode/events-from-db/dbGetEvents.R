@@ -70,7 +70,8 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
         ";")
       dbSendQuery(conn, sql)
       res1 <- dbGetQuery(conn, "SELECT * FROM temp_results;")
-    } else if (end.date > gdelt.historical.end) {
+    } 
+    if (end.date > gdelt.historical.end) {
       # Only query daily updates table
       dbSendQuery(conn, "DROP TABLE IF EXISTS temp_results;")
       sql <- paste0(
@@ -152,32 +153,37 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
 }
 
 # Test it
-codes <- c(141, 1411, 1412, 1413, 1414)
-test1 <- dbGetEvents("icews", "Egypt", "2013-06-01", "2013-06-03", codes)
-test2 <- dbGetEvents("gdelt", "Egypt", "2013-06-01", "2013-06-03", codes)
-
+#codes <- c(141, 1411, 1412, 1413, 1414)
+#test1 <- dbGetEvents("icews", "Egypt", "2013-06-01", "2013-06-03", codes)
+#test2 <- dbGetEvents("gdelt", "Egypt", "2011-06-01", "2011-06-03", codes)
+#test3 <- dbGetEvents("gdelt", "Egypt", "2013-06-01", "2013-06-03", codes)
+system.time(
+test4 <- dbGetEvents("gdelt", "Egypt", "2013-03-30", "2013-04-02", codes)
+)
 
 # Write csv ---------------------------------------------------------------
 
 
-prot.codes <- c(141, 1411, 1412, 1413, 1414, 145, 1451, 1452, 1453, 1454)
-conf.codes <- c()
+prot.codes <- c(141, 1411, 1412, 1413, 1414, 
+                145, 1451, 1452, 1453, 1454)
+conf.codes <- c(19, 190, 191, 192, 193, 194, 195, 196,
+                20, 200, 201, 202, 203, 204, 2041)
 
 # Egypt
-t1 <- dbGetEvents("icews", "Egypt", "2011-01-01", "2013-08-31", prot.codes)
-t2 <- dbGetEvents("gdelt", "Egypt", "2011-01-01", "2013-08-31", prot.codes)
+t1 <- dbGetEvents("icews", "Egypt", "2011-01-01", "2013-09-03", prot.codes)
+t2 <- dbGetEvents("gdelt", "Egypt", "2011-01-01", "2013-09-03", prot.codes)
 egypt <- rbind(t1, t2); rm(t1, t2)
 write.csv(egypt, file="egypt.csv")
 
 # Syria
-t1 <- dbGetEvents("icews", "Syria", "2011-01-01", "2013-08-31", conf.codes)
-t2 <- dbGetEvents("gdelt", "Syria", "2011-01-01", "2013-08-31", conf.codes)
+t1 <- dbGetEvents("icews", "Syria", "2011-01-01", "2013-09-03", conf.codes)
+t2 <- dbGetEvents("gdelt", "Syria", "2011-01-01", "2013-09-03", conf.codes)
 syria <- rbind(t1, t2); rm(t1, t2)
 write.csv(syria, file="syria.csv")
 
 # Turkey
-t1 <- dbGetEvents("icews", "Turkey", "2011-01-01", "2013-08-31", prot.codes)
-t2 <- dbGetEvents("gdelt", "Turkey", "2011-01-01", "2013-08-31", prot.codes)
+t1 <- dbGetEvents("icews", "Turkey", "2011-01-01", "2013-09-03", prot.codes)
+t2 <- dbGetEvents("gdelt", "Turkey", "2011-01-01", "2013-09-03", prot.codes)
 turkey <- rbind(t1, t2); rm(t1, t2)
 write.csv(turkey, file="turkey.csv")
 
