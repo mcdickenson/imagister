@@ -1,8 +1,11 @@
+# Get updated event data for imagister
+# AB 
+# September 2013
+#
 # dbGetEvents() function to pull events for a country over date range for 
 #   given CAMEO codes from ICEWS or GDELT database.
 #   Output df: source, country, date, latitude, longitude, cameo_code
-# AB
-# September 2013
+
 
 formatList <- function(vector) {
   # Format a list for SQL
@@ -28,10 +31,10 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
     
     # Get ISO country code
     sql <- paste0(
-      "SELECT isocode FROM countries WHERE countryname='",
+      "SELECT fipscode FROM countries WHERE countryname='",
       toupper(country),
       "';")
-    isocode <- dbGetQuery(conn, sql)
+    fipscode <- dbGetQuery(conn, sql)
     
     # In db, gdelt is separated into two tables split by the date
     # 2013-03-31. Depending on where start and end date are, there are
@@ -64,7 +67,7 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
         "    sqldate AS date, eventcode AS cameo_code, \n",
         "    actiongeo_lat AS latitude, actiongeo_long AS longitude \n",
         "FROM gdelt_historical \n",
-        "WHERE actiongeo_countrycode = '", isocode, "'\n",
+        "WHERE actiongeo_countrycode = '", fipsode, "'\n",
         "AND sqldate BETWEEN '", start1, "' AND '", end1, "'\n",
         "AND eventcode IN ", formatList(cameo.codes), "\n",
         ";")
@@ -80,7 +83,7 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
         "    sqldate AS date, eventcode AS cameo_code, \n",
         "    actiongeo_lat AS latitude, actiongeo_long AS longitude \n",
         "FROM gdelt_dailyupdates \n",
-        "WHERE actiongeo_countrycode = '", isocode, "'\n",
+        "WHERE actiongeo_countrycode = '", fipsode, "'\n",
         "AND sqldate BETWEEN '", start2, "' AND '", end2, "'\n",
         "AND eventcode IN ", formatList(cameo.codes), "\n",
         ";")
@@ -157,9 +160,8 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
 #test1 <- dbGetEvents("icews", "Egypt", "2013-06-01", "2013-06-03", codes)
 #test2 <- dbGetEvents("gdelt", "Egypt", "2011-06-01", "2011-06-03", codes)
 #test3 <- dbGetEvents("gdelt", "Egypt", "2013-06-01", "2013-06-03", codes)
-system.time(
-test4 <- dbGetEvents("gdelt", "Egypt", "2013-03-30", "2013-04-02", codes)
-)
+#test4 <- dbGetEvents("gdelt", "Egypt", "2013-03-30", "2013-04-02", codes)
+
 
 # Write csv ---------------------------------------------------------------
 
@@ -172,18 +174,27 @@ conf.codes <- c(19, 190, 191, 192, 193, 194, 195, 196,
 # Egypt
 t1 <- dbGetEvents("icews", "Egypt", "2011-01-01", "2013-09-03", prot.codes)
 t2 <- dbGetEvents("gdelt", "Egypt", "2011-01-01", "2013-09-03", prot.codes)
+# t2a.eg <- dbGetQuery(conn, "SELECT * FROM egypt2;")
+# t2b.eg <- dbGetQuery(conn, "SELECT * FROM egypt;")
+# t2 <- rbind(t2a.eg, t2b.eg)
 egypt <- rbind(t1, t2); rm(t1, t2)
 write.csv(egypt, file="egypt.csv")
 
 # Syria
-t1 <- dbGetEvents("icews", "Syria", "2011-01-01", "2013-09-03", conf.codes)
+t1 <- dbGetEvents("icews", "Syrian Arab Republic", "2011-01-01", "2013-09-03", conf.codes)
 t2 <- dbGetEvents("gdelt", "Syria", "2011-01-01", "2013-09-03", conf.codes)
+# t2a.sy <- dbGetQuery(conn, "SELECT * FROM syria2;")
+# t2b.sy <- dbGetQuery(conn, "SELECT * FROM syria;")
+# t2 <- rbind(t2a, t2b)
 syria <- rbind(t1, t2); rm(t1, t2)
 write.csv(syria, file="syria.csv")
 
 # Turkey
 t1 <- dbGetEvents("icews", "Turkey", "2011-01-01", "2013-09-03", prot.codes)
 t2 <- dbGetEvents("gdelt", "Turkey", "2011-01-01", "2013-09-03", prot.codes)
+# t2a.tr <- dbGetQuery(conn, "SELECT * FROM turkey2;")
+# t2b.tr <- dbGetQuery(conn, "SELECT * FROM turkey;")
+# t2 <- rbind(t2a, t2b)
 turkey <- rbind(t1, t2); rm(t1, t2)
 write.csv(turkey, file="turkey.csv")
 
