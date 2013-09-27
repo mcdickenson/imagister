@@ -18,7 +18,8 @@ formatList <- function(vector) {
   res
 }
 
-dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes) 
+dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes, 
+                        exe=F) 
   {
   if (!data.source %in% c("icews", "gdelt")) stop("data.source must be 'icews' or 'gdelt'")
   if (as.Date(start.date) >= as.Date(end.date)) stop("start date must be before end date")
@@ -67,12 +68,17 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
         "    sqldate AS date, eventcode AS cameo_code, \n",
         "    actiongeo_lat AS latitude, actiongeo_long AS longitude \n",
         "FROM gdelt_historical \n",
-        "WHERE actiongeo_countrycode = '", fipsode, "'\n",
+        "WHERE actiongeo_countrycode = '", fipscode, "'\n",
         "AND sqldate BETWEEN '", start1, "' AND '", end1, "'\n",
-        "AND eventcode IN ", formatList(cameo.codes), "\n",
+        "AND eventcode IN ", formatList(cameo.codes),
         ";")
-      dbSendQuery(conn, sql)
-      res1 <- dbGetQuery(conn, "SELECT * FROM temp_results;")
+      if (!exe) {
+        cat("Query for GDELT historical: \n\n")
+        cat(sql, "\n\n")
+      } else {
+        dbSendQuery(conn, sql)
+        res1 <- dbGetQuery(conn, "SELECT * FROM temp_results;")
+      }
     } 
     if (end.date > gdelt.historical.end) {
       # Only query daily updates table
@@ -87,14 +93,21 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
         "AND sqldate BETWEEN '", start2, "' AND '", end2, "'\n",
         "AND eventcode IN ", formatList(cameo.codes), "\n",
         ";")
-      dbSendQuery(conn, sql)
-      res2 <- dbGetQuery(conn, "SELECT * FROM temp_results;")
+      if (!exe) {
+        cat("Query for GDELT daily updates: \n\n")
+        cat(sql, "\n\n")
+      } else {
+        dbSendQuery(conn, sql)
+        res2 <- dbGetQuery(conn, "SELECT * FROM temp_results;")
+      }
     } 
     # Combine results
     res <- rbind(res1, res2)  # if we did only one query, one of these will be
                               # NULL, which does not affect rbind()
-    res$date <- as.Date(as.character(res$date), format="%Y%m%d")
-    dbSendQuery(conn, "DROP TABLE temp_results;")
+    if (!is.null(res)) {
+      res$date <- as.Date(as.character(res$date), format="%Y%m%d")
+      dbSendQuery(conn, "DROP TABLE temp_results;")
+    }
   }
   
   # Query for ICEWS as data source
@@ -150,6 +163,7 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes)
                 DROP COLUMN eventtype_ID,
                 DROP COLUMN location_ID;")
     res <- dbGetQuery(conn, "SELECT * FROM temp_results;")
+    res$date <- as.Date(res$date)
     dbSendQuery(conn, "DROP TABLE temp_results;")
   }
   return(res)
@@ -174,10 +188,11 @@ conf.codes <- c(19, 190, 191, 192, 193, 194, 195, 196,
 # Egypt
 t1 <- dbGetEvents("icews", "Egypt", "2011-01-01", "2013-09-03", prot.codes)
 t2 <- dbGetEvents("gdelt", "Egypt", "2011-01-01", "2013-09-03", prot.codes)
-# t2a.eg <- dbGetQuery(conn, "SELECT * FROM egypt2;")
-# t2b.eg <- dbGetQuery(conn, "SELECT * FROM egypt;")
-# t2 <- rbind(t2a.eg, t2b.eg)
-egypt <- rbind(t1, t2); rm(t1, t2)
+#t2a.eg <- dbGetQuery(conn, "SELECT * FROM egypt2;")
+#t2b.eg <- dbGetQuery(conn, "SELECT * FROM egypt;")
+#t2 <- rbind(t2a.eg, t2b.eg)
+#t2$date <- as.Date(as.character(t2$date), format="%Y%m%d")
+egypt <- rbind(t1.eg, t2)#; rm(t1, t2)
 write.csv(egypt, file="egypt.csv")
 
 # Syria
@@ -185,8 +200,9 @@ t1 <- dbGetEvents("icews", "Syrian Arab Republic", "2011-01-01", "2013-09-03", c
 t2 <- dbGetEvents("gdelt", "Syria", "2011-01-01", "2013-09-03", conf.codes)
 # t2a.sy <- dbGetQuery(conn, "SELECT * FROM syria2;")
 # t2b.sy <- dbGetQuery(conn, "SELECT * FROM syria;")
-# t2 <- rbind(t2a, t2b)
-syria <- rbind(t1, t2); rm(t1, t2)
+#t2 <- rbind(t2a.sy, t2b.sy)
+#t2$date <- as.Date(as.character(t2$date), format="%Y%m%d")
+syria <- rbind(t1.sy, t2)#; rm(t1, t2)
 write.csv(syria, file="syria.csv")
 
 # Turkey
@@ -194,8 +210,9 @@ t1 <- dbGetEvents("icews", "Turkey", "2011-01-01", "2013-09-03", prot.codes)
 t2 <- dbGetEvents("gdelt", "Turkey", "2011-01-01", "2013-09-03", prot.codes)
 # t2a.tr <- dbGetQuery(conn, "SELECT * FROM turkey2;")
 # t2b.tr <- dbGetQuery(conn, "SELECT * FROM turkey;")
-# t2 <- rbind(t2a, t2b)
-turkey <- rbind(t1, t2); rm(t1, t2)
+# t2 <- rbind(t2a.tr, t2b.tr)
+#t2$date <- as.Date(as.character(t2$date), format="%Y%m%d")
+turkey <- rbind(t1.tr, t2)#; rm(t1, t2)
 write.csv(turkey, file="turkey.csv")
 
 # All
