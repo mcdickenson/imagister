@@ -5,7 +5,7 @@
 dbSetup <- function() {
   if (Sys.info()["user"]=="ab428") {
     db.user <- "ab428"
-    db.pw <- "hrcak2575"
+    db.pw <- ""
   }
   if (db.pw=="") stop("Fill in database password")
   

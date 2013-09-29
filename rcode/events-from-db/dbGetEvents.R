@@ -89,10 +89,9 @@ dbGetEvents <- function(data.source, country, start.date, end.date, cameo.codes,
         "    sqldate AS date, eventcode AS cameo_code, \n",
         "    actiongeo_lat AS latitude, actiongeo_long AS longitude \n",
         "FROM gdelt_dailyupdates \n",
-        "WHERE actiongeo_countrycode = '", fipsode, "'\n",
+        "WHERE actiongeo_countrycode = '", fipscode, "'\n",
         "AND sqldate BETWEEN '", start2, "' AND '", end2, "'\n",
-        "AND eventcode IN ", formatList(cameo.codes), "\n",
-        ";")
+        "AND eventcode IN ", formatList(cameo.codes), ";")
       if (!exe) {
         cat("Query for GDELT daily updates: \n\n")
         cat(sql, "\n\n")
@@ -188,10 +187,31 @@ conf.codes <- c(19, 190, 191, 192, 193, 194, 195, 196,
 # Egypt
 t1 <- dbGetEvents("icews", "Egypt", "2011-01-01", "2013-09-03", prot.codes)
 t2 <- dbGetEvents("gdelt", "Egypt", "2011-01-01", "2013-09-03", prot.codes)
+
+# CREATE TABLE egypt2 AS 
+# SELECT 'gdelt' AS source, 'Egypt' AS country, 
+# sqldate AS date, eventcode AS cameo_code, 
+# actiongeo_lat AS latitude, actiongeo_long AS longitude 
+# FROM gdelt_historical 
+# WHERE actiongeo_countrycode = 'EG'
+# AND sqldate BETWEEN '20110101' AND '20130331'
+# AND eventcode IN ('141', '1411', '1412', '1413', '1414', '145', '1451', '1452', '1453', '1454'); 
 #t2a.eg <- dbGetQuery(conn, "SELECT * FROM egypt2;")
+
+# CREATE TABLE egypt AS 
+# SELECT 'gdelt' AS source, 'Egypt' AS country, 
+# sqldate AS date, eventcode AS cameo_code, 
+# actiongeo_lat AS latitude, actiongeo_long AS longitude 
+# FROM gdelt_dailyupdates 
+# WHERE actiongeo_countrycode = 'EG'
+# AND sqldate BETWEEN '20130401' AND '20130903'
+# AND eventcode IN ('141', '1411', '1412', '1413', '1414', '145', '1451', '1452', '1453', '1454')
 #t2b.eg <- dbGetQuery(conn, "SELECT * FROM egypt;")
+
 #t2 <- rbind(t2a.eg, t2b.eg)
 #t2$date <- as.Date(as.character(t2$date), format="%Y%m%d")
+#temp <- subset(t2, t2$date >= as.Date("2012-11-01") & t2$date <= as.Date("2012-11-30"))
+#daily <- as.matrix(unlist(by(temp, temp$date, nrow)))
 egypt <- rbind(t1.eg, t2)#; rm(t1, t2)
 write.csv(egypt, file="egypt.csv")
 
@@ -208,8 +228,27 @@ write.csv(syria, file="syria.csv")
 # Turkey
 t1 <- dbGetEvents("icews", "Turkey", "2011-01-01", "2013-09-03", prot.codes)
 t2 <- dbGetEvents("gdelt", "Turkey", "2011-01-01", "2013-09-03", prot.codes)
+
+# CREATE TABLE turkey2 AS 
+# SELECT 'gdelt' AS source, 'Turkey' AS country, 
+# sqldate AS date, eventcode AS cameo_code, 
+# actiongeo_lat AS latitude, actiongeo_long AS longitude 
+# FROM gdelt_historical 
+# WHERE actiongeo_countrycode = 'TU'
+# AND sqldate BETWEEN '20110101' AND '20130331'
+# AND eventcode IN ('141', '1411', '1412', '1413', '1414', '145', '1451', '1452', '1453', '1454'); 
 # t2a.tr <- dbGetQuery(conn, "SELECT * FROM turkey2;")
+
+# CREATE TABLE turkey AS 
+# SELECT 'gdelt' AS source, 'Turkey' AS country, 
+# sqldate AS date, eventcode AS cameo_code, 
+# actiongeo_lat AS latitude, actiongeo_long AS longitude 
+# FROM gdelt_dailyupdates 
+# WHERE actiongeo_countrycode = 'TU'
+# AND sqldate BETWEEN '20130401' AND '20130903'
+# AND eventcode IN ('141', '1411', '1412', '1413', '1414', '145', '1451', '1452', '1453', '1454')
 # t2b.tr <- dbGetQuery(conn, "SELECT * FROM turkey;")
+
 # t2 <- rbind(t2a.tr, t2b.tr)
 #t2$date <- as.Date(as.character(t2$date), format="%Y%m%d")
 turkey <- rbind(t1.tr, t2)#; rm(t1, t2)
