@@ -213,7 +213,7 @@ t2 <- dbGetEvents("gdelt", "Egypt", "2011-01-01", "2013-09-03", prot.codes)
 #temp <- subset(t2, t2$date >= as.Date("2012-11-01") & t2$date <= as.Date("2012-11-30"))
 #daily <- as.matrix(unlist(by(temp, temp$date, nrow)))
 egypt <- rbind(t1.eg, t2)#; rm(t1, t2)
-write.csv(egypt, file="egypt.csv")
+write.csv(egypt, file="egypt.csv", row.names=F)
 
 # Syria
 t1 <- dbGetEvents("icews", "Syrian Arab Republic", "2011-01-01", "2013-09-03", conf.codes)
@@ -223,7 +223,7 @@ t2 <- dbGetEvents("gdelt", "Syria", "2011-01-01", "2013-09-03", conf.codes)
 #t2 <- rbind(t2a.sy, t2b.sy)
 #t2$date <- as.Date(as.character(t2$date), format="%Y%m%d")
 syria <- rbind(t1.sy, t2)#; rm(t1, t2)
-write.csv(syria, file="syria.csv")
+write.csv(syria, file="syria.csv", row.names=F)
 
 # Turkey
 t1 <- dbGetEvents("icews", "Turkey", "2011-01-01", "2013-09-03", prot.codes)
@@ -252,11 +252,11 @@ t2 <- dbGetEvents("gdelt", "Turkey", "2011-01-01", "2013-09-03", prot.codes)
 # t2 <- rbind(t2a.tr, t2b.tr)
 #t2$date <- as.Date(as.character(t2$date), format="%Y%m%d")
 turkey <- rbind(t1.tr, t2)#; rm(t1, t2)
-write.csv(turkey, file="turkey.csv")
+write.csv(turkey, file="turkey.csv", row.names=F)
 
 # All
 all <- rbind(egypt, syria, turkey)
-write.csv(all, file="all.csv")
+write.csv(all, file="all.csv", row.names=F)
 
 
 # End, close connection ---------------------------------------------------
